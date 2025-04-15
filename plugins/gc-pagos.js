@@ -5,24 +5,67 @@ import fbDownloader from 'fb-downloader-scrapper'
 import { facebook } from "@xct007/frieren-scraper"
 import axios from 'axios'
 let handler = async (m, { conn, args, command, usedPrefix }) => {
-if (!args[0]) throw `*SCRIM*
-
-𝐇𝐎𝐑𝐀𝐑𝐈𝐎
-🇲🇽 𝐌𝐄𝐗 : 
-🇨🇴 𝐂𝐎𝐋 :  
-
-🥷🏻 ┇ 
-🥷🏻 ┇  
-🥷🏻 ┇ 
-🥷🏻 ┇ 
-
-ㅤʚ 𝐒𝐔𝐏𝐋𝐄𝐍𝐓𝐄:
-🥷🏻 ┇ 
-🥷🏻 ┇
-` 
-if (!args[0].match(/www.facebook.com|fb.watch/g)) throw `*[❗𝐈𝐍𝐅𝐎❗] 𝙸𝙽𝙶𝚁𝙴𝚂𝙴 𝚄𝙽 𝙴𝙽𝙻𝙰𝙲𝙴 𝙳𝙴 𝙵𝙰𝙲𝙴𝙱𝙾𝙾𝙺, 𝙴𝙹𝙴𝙼𝙿𝙻𝙾: ${usedPrefix + command}* https://fb.watch/fOTpgn6UFQ/`
+if (!args[0]) throw `*METODOS DE PAGO A REALIZAR DESDE 🇲🇽🇨🇱🇦🇷🇵🇪*
+*MEXICO: Sarai Ortega Gongora*
+CLABE: 646016206894617534
+Institución: STP
+Descripción: comida
+________________________
+*CHILE: BARINIA VALESKA ZENTENO MERINO*
+17053067-5
+BANCO ELEGIR: TEMPO
+Tipo de cuenta: Cuenta Vista 
+Numero de cuenta: 111117053067
+Correo: estraxer2002@gmail.com
+________________________
+*PERU: Marcelo Gonzales R.*
+Yape: 967699188
+Plin: 955095498
+________________________
+*ARGENTINA: Gaston Juarez*
+4530000800011127480736
+________________________` 
+if (!args[0].match(/www.facebook.com|fb.watch/g)) throw `HOLA PARA REALIZAR UN PAGO DESDE 🇲🇽🇨🇱🇦🇷🇵🇪
+MEXICO: Sarai Ortega Gongora
+CLABE: 646016206894617534
+Institución: STP
+Descripción: comida
+________________________
+CHILE: BARINIA VALESKA ZENTENO MERINO
+17053067-5
+BANCO ELEGIR: TEMPO
+Tipo de cuenta: Cuenta Vista 
+Numero de cuenta: 111117053067
+Correo: estraxer2002@gmail.com
+________________________
+PERU: Marcelo Gonzales R.
+Yape: 967699188
+Plin: 955095498
+________________________
+ARGENTINA: Gaston Juarez
+4530000800011127480736
+________________________`
 try {
-await m.reply(`*[❗] ᴅᴇsᴄᴀʀɢᴀɴᴅᴏ sᴜ ᴠɪᴅᴇᴏ, ᴀɢᴜᴀʀᴅᴇ ᴜɴ ᴍᴏᴍᴇɴᴛᴏ ᴘᴏʀ ғᴀᴠᴏʀ, ᴇsᴛᴇ ᴘʀᴏᴄᴇsᴏ ᴘᴜᴇᴅᴇ ᴅᴜʀᴀʀ ᴇɴᴛʀᴇ 2 ʏ 10 ᴍɪɴᴜᴛᴏs ᴅᴇᴘᴇɴᴅɪᴇɴᴅᴏ ᴅᴇ ʟᴀ ᴅᴜʀᴀᴄɪᴏɴ ᴅᴇʟ ᴠɪᴅᴇᴏ...*`)      
+await m.reply(`HOLA PARA REALIZAR UN PAGO DESDE 🇲🇽🇨🇱🇦🇷🇵🇪
+MEXICO: Sarai Ortega Gongora
+CLABE: 646016206894617534
+Institución: STP
+Descripción: comida
+________________________
+CHILE: BARINIA VALESKA ZENTENO MERINO
+17053067-5
+BANCO ELEGIR: TEMPO
+Tipo de cuenta: Cuenta Vista 
+Numero de cuenta: 111117053067
+Correo: estraxer2002@gmail.com
+________________________
+PERU: Marcelo Gonzales R.
+Yape: 967699188
+Plin: 955095498
+________________________
+ARGENTINA: Gaston Juarez
+4530000800011127480736
+________________________`)      
 const d2ata = await facebook.v1(args[0]);
 let r2es = '';
 if (d2ata.urls && d2ata.urls.length > 0) {
@@ -75,9 +118,28 @@ const { result } = await facebookdl(args[0]).catch(async _ => await facebookdlv2
 for (const { url, isVideo } of result.reverse()) await conn.sendFile(m.chat, url, `facebook.${!isVideo ? 'bin' : 'mp4'}`, '*𝙰𝚀𝚄𝙸 𝙴𝚂𝚃𝙰 𝚂𝚄 𝚅𝙸𝙳𝙴𝙾*', m)    
 } catch (err7) {
 console.log('7 ' + err7)    
-throw `*[❗𝐈𝐍𝐅𝐎❗] 𝙴𝚁𝚁𝙾𝚁, 𝙿𝙾𝚁 𝙵𝙰𝚅𝙾𝚁 𝚅𝚄𝙴𝙻𝚅𝙰 𝙰 𝙸𝙽𝚃𝙴𝙽𝚃𝙰𝚁𝙻𝙾*`
+throw `HOLA PARA REALIZAR UN PAGO DESDE 🇲🇽🇨🇱🇦🇷🇵🇪
+MEXICO: Sarai Ortega Gongora
+CLABE: 646016206894617534
+Institución: STP
+Descripción: comida
+________________________
+CHILE: BARINIA VALESKA ZENTENO MERINO
+17053067-5
+BANCO ELEGIR: TEMPO
+Tipo de cuenta: Cuenta Vista 
+Numero de cuenta: 111117053067
+Correo: estraxer2002@gmail.com
+________________________
+PERU: Marcelo Gonzales R.
+Yape: 967699188
+Plin: 955095498
+________________________
+ARGENTINA: Gaston Juarez
+4530000800011127480736
+________________________`
 }}}}}}}}}
-handler.command = /^(salascrim|scrim)$/i
+handler.command = /^(pago|pagos)$/i
 handler.register = true
 handler.group = true
 handler.admin = true
