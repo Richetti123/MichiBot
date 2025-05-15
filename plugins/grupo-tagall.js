@@ -25,7 +25,7 @@ memberData.sort((a, b) => b.messages - a.messages);
 let activeCount = memberData.filter(mem => mem.messages > 0).length;
 let inactiveCount = memberData.filter(mem => mem.messages === 0).length;
   
-let teks = `𝙈𝙞𝙘𝙝𝙞 𝙩𝙚 𝙞𝙣𝙫𝙤𝙘𝙖 𝙥𝙡𝙖𝙣𝙩𝙖🌱🗣️\n\n*📊 Actividad del grupo 📊*\n\n`;
+let teks = `${global.packname} te invoca despiertate😡!!\n\n*📊 Actividad del grupo 📊*\n\n`;
 teks += `Grupo: ${await conn.getName(m.chat)}\n`;
 teks += `Total de miembros: ${participants.length}\n`;
 teks += `Miembros activos: ${activeCount}\n`;
