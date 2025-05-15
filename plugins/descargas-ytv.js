@@ -10,7 +10,7 @@ const { ytmp3, ytmp4 } = require("@hiudyy/ytdl");
 const LimitVid = 450 * 1024 * 1024; // 450MB
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
-if (!args[0]) return conn.reply(m.chat, `${lenguajeGB['smsAvisoMG']()}${mid.smsMalused7}\n*${usedPrefix + command} https://youtu.be/c5gJRzCi0f0*`, fkontak, m);
+if (!args[0]) return conn.reply(m.chat, `${lenguajeGB['smsAvisoMG']()}${mid.smsMalused7}\n*${usedPrefix + command} https://youtu.be/H7-7TXXnw8I*`, fkontak, m);
 const yt_play = await search(args.join(' '));
 let youtubeLink = '';
 if (args[0].includes('you')) {
