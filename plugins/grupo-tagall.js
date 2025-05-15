@@ -6,13 +6,11 @@ throw false
 
 if (command == 'tagall' || command == 'invocar' || command == 'todos' || command == 'invocación' || command == 'invocacion') {
 let pesan = args.join` `
-let oi = `ღ ${lenguajeGB['smsAddB5']()} ${pesan}`
-let teks = `╭━〔 *${lenguajeGB['smstagaa']()}* 〕━⬣\n\n${oi}\n\n`
+let oi = `@richetti_123 ${pesan}`
+let teks = `${global.packname} te invoca despiertate😡!!\n\n${oi}\n\n`
 for (let mem of participants) {
-teks += `┃⊹ @${mem.id.split('@')[0]}\n`}
-teks += `┃\n`
-teks += `┃ ${wm}\n`
-teks += `╰━━━━━[ *𓃠 ${vs}* ]━━━━━⬣`
+teks += `😼 @${mem.id.split('@')[0]}\n`}
+teks += `${global.packname}`
 conn.sendMessage(m.chat, { text: teks, mentions: participants.map(a => a.id) }, )  
 }
 
@@ -27,18 +25,15 @@ memberData.sort((a, b) => b.messages - a.messages);
 let activeCount = memberData.filter(mem => mem.messages > 0).length;
 let inactiveCount = memberData.filter(mem => mem.messages === 0).length;
   
-let teks = `╭━〔 *${lenguajeGB['smstagaa']()}* 〕━⬣\n\n*📊 Actividad del grupo 📊*\n\n`;
-teks += `┃ Grupo: ${await conn.getName(m.chat)}\n`;
-teks += `┃ Total de miembros: ${participants.length}\n`;
-teks += `┃ Miembros activos: ${activeCount}\n`;
-teks += `┃ Miembros inactivos: ${inactiveCount}\n\n`;
-teks += `┃ Lista de miembros:\n`;
+let teks = `𝙈𝙞𝙘𝙝𝙞 𝙩𝙚 𝙞𝙣𝙫𝙤𝙘𝙖 𝙥𝙡𝙖𝙣𝙩𝙖🌱🗣️\n\n*📊 Actividad del grupo 📊*\n\n`;
+teks += `Grupo: ${await conn.getName(m.chat)}\n`;
+teks += `Total de miembros: ${participants.length}\n`;
+teks += `Miembros activos: ${activeCount}\n`;
+teks += `Miembros inactivos: ${inactiveCount}\n\n`;
+teks += `Lista de miembros:\n`;
   
 for (let mem of memberData) {
-teks += `┃⊹ @${mem.id.split('@')[0]} - Mensajes: ${mem.messages}\n`;
-teks += `┃\n`
-teks += `┃ ${wm}\n`
-teks += `╰━━━━━[ *𓃠 ${vs}* ]━━━━━⬣`
+teks += `🤖 @${mem.id.split('@')[0]} - Mensajes: ${mem.messages}\n`;
 }
 conn.sendMessage(m.chat, { text: teks, mentions: memberData.map(a => a.id) }, { quoted: m });
 }
