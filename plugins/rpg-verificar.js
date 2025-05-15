@@ -135,7 +135,7 @@ externalAdReply: {
 title: wm,
 body: '🌟 Puede modificar su registro antes de finalizar',
 thumbnailUrl: pp, 
-sourceUrl: 'https://www.atom.bio/gatabot/',
+sourceUrl: md,
 mediaType: 1,
 showAdAttribution: true,
 renderLargerThumbnail: true
@@ -2470,13 +2470,13 @@ ${user.registroC === true ? `☘️ *GÉNERO*
 ❇️ *PASATIEMPO(S)*
 ❱❱ ${user.pasatiempo}\n
 ${user.premLimit === 1 ? '' : `🎟️ *PREMIUM*
-❱❱ ${user.premLimit === 1 ? '' : `${user.premiumTime > 0 ? '✅' : '❌'} +10 HORAS || ${user.premiumTime - now} ms`}`}   ` : ''}${user.registroC === true ? `\n🌟 *Si es su primera vez registrándose, recibirá horas premium de forma gratuita como bonificación exclusiva por su primera inscripción, puede cancelar y eliminar su registro en cualquier momento. Gracias por registrarse ✨*` : ''}\n> *Mira tú registro en este canal*\nhttps://whatsapp.com/channel/0029VatPwXw7Noa8n1Vinx3g`.trim(),
+❱❱ ${user.premLimit === 1 ? '' : `${user.premiumTime > 0 ? '✅' : '❌'} +10 HORAS || ${user.premiumTime - now} ms`}`}   ` : ''}${user.registroC === true ? `\n🌟 *Si es su primera vez registrándose, recibirá horas premium de forma gratuita como bonificación exclusiva por su primera inscripción, puede cancelar y eliminar su registro en cualquier momento. Gracias por registrarse ✨*` : ''}\n> *Mira tú registro en este canal*\nhttps://whatsapp.com/channel/0029Vb5KnEv0wajldteZlH0G`.trim(),
 contextInfo: {
 externalAdReply: {
 title: wm,
 body: user.name,
 thumbnailUrl: pp, 
-sourceUrl: 'https://www.atom.bio/gatabot',
+sourceUrl: md,
 mediaType: 1,
 showAdAttribution: true,
 renderLargerThumbnail: true
