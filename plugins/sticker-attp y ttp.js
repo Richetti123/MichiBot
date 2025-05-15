@@ -9,11 +9,11 @@ let teks = encodeURI(text)
 
 if (command == 'attp') {
 let stiker = await sticker(null,`${global.APIs.fgmods.url}/maker/attp?text=${teks}&apikey=${global.APIs.fgmods.key}`, f, g)
-conn.sendFile(m.chat, stiker, 'sticker.webp', '',m, true, { contextInfo: { 'forwardingScore': 200, 'isForwarded': false, externalAdReply:{ showAdAttribution: false, title: wm, body: `😻 𝗦𝘂𝗽𝗲𝗿 𝗚𝗮𝘁𝗮𝗕𝗼𝘁-𝗠𝗗 - 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 `, mediaType: 2, sourceUrl: accountsgb, thumbnail: imagen1}}}, { quoted: m })}
+conn.sendFile(m.chat, stiker, 'sticker.webp', '',m, true, { contextInfo: { 'forwardingScore': 200, 'isForwarded': false, externalAdReply:{ showAdAttribution: false, title: wm, body: wm, mediaType: 2, sourceUrl: accountsgb, thumbnail: imagen1}}}, { quoted: m })}
 
 if (command == 'ttp') {
 let stiker = await sticker(null,`${global.APIs.fgmods.url}/maker/ttp?text=${teks}&apikey=${global.APIs.fgmods.key}`, f, g)
-conn.sendFile(m.chat, stiker, 'sticker.webp', '',m, true, { contextInfo: { 'forwardingScore': 200, 'isForwarded': false, externalAdReply:{ showAdAttribution: false, title: wm, body: `😻 𝗦𝘂𝗽𝗲𝗿 𝗚𝗮𝘁𝗮𝗕𝗼𝘁-𝗠𝗗 - 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 `, mediaType: 2, sourceUrl: accountsgb, thumbnail: imagen1}}}, { quoted: m })
+conn.sendFile(m.chat, stiker, 'sticker.webp', '',m, true, { contextInfo: { 'forwardingScore': 200, 'isForwarded': false, externalAdReply:{ showAdAttribution: false, title: wm, body: wm, mediaType: 2, sourceUrl: accountsgb, thumbnail: imagen1}}}, { quoted: m })
 }
 }
 handler.help = ['attp'];
