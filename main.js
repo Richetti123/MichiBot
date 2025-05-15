@@ -238,7 +238,7 @@ loadDatabase();/*
 /* ------------------------------------------------*/
 
 global.creds = 'creds.json'
-global.authFile = 'GataBotSession'
+global.authFile = 'MichiBot'
 global.authFileJB  = 'GataJadiBot'
 global.rutaBot = join(__dirname, authFile)
 global.rutaJadiBot = join(__dirname, authFileJB)
@@ -351,7 +351,7 @@ const connectionOptions = {
 logger: pino({ level: 'silent' }),
 printQRInTerminal: opcion == '1' ? true : methodCodeQR ? true : false,
 mobile: MethodMobile, 
-browser: opcion == '1' ? ['GataBot-MD', 'Edge', '20.0.04'] : methodCodeQR ? ['GataBot-MD', 'Edge', '20.0.04'] : ["Ubuntu", "Chrome", "20.0.04"],
+browser: opcion == '1' ? ['MichiBot', 'Edge', '20.0.04'] : methodCodeQR ? ['MichiBot', 'Edge', '20.0.04'] : ["Ubuntu", "Chrome", "20.0.04"],
 auth: {
 creds: state.creds,
 keys: makeCacheableSignalKeyStore(state.keys, Pino({ level: "fatal" }).child({ level: "fatal" })),
@@ -663,7 +663,7 @@ unlinkSync(filePath)})
 }
 
 async function purgeSession() {
-const sessionDir = './GataBotSession';
+const sessionDir = './MichiBot';
 try {
 if (!existsSync(sessionDir)) return;
 const files = await readdir(sessionDir);
@@ -725,7 +725,7 @@ console.log(chalk.bold.red(lenguajeGB.smspurgeSessionSB3() + err))
 }}
 
 async function purgeOldFiles() {
-const directories = ['./GataBotSession/', './GataJadiBot/'];
+const directories = ['./MichiBot/', './GataJadiBot/'];
 for (const dir of directories) {
 try {
 if (!fs.existsSync(dir)) { 
