@@ -41,6 +41,7 @@ return;
 if (global.db.data == null) await global.loadDatabase()
 try {
 m = smsg(this, m) || m
+global.mconn = m
 if (!m)
 return
 m.exp = 0
@@ -985,7 +986,7 @@ if (!('delete' in chat)) chat.delete = false
 if (!('modohorny' in chat)) chat.modohorny = true       
 if (!('stickers' in chat)) chat.stickers = false            
 if (!('autosticker' in chat)) chat.autosticker = false      
-if (!('audios' in chat)) chat.audios = true               
+if (!('audios' in chat)) chat.audios = false               
 if (!('antiver' in chat)) chat.antiver = false 
 if (!('antiPorn' in chat)) chat.antiPorn = true     
 if (!('antiLink' in chat)) chat.antiLink = false     
@@ -1000,17 +1001,17 @@ if (!('antiDiscord' in chat)) chat.antiDiscord = false
 if (!('antiThreads' in chat)) chat.antiThreads = false
 if (!('antiTwitch' in chat)) chat.antiTwitch = false
 if (!('antifake' in chat)) chat.antifake = false
-if (!('reaction' in chat)) chat.reaction = true    
+if (!('reaction' in chat)) chat.reaction = false    
 if (!('viewonce' in chat)) chat.viewonce = false       
 if (!('modoadmin' in chat)) chat.modoadmin = false  
-if (!('autorespond' in chat)) chat.autorespond = true
-if (!('antitoxic' in chat)) chat.antitoxic = true
+if (!('autorespond' in chat)) chat.autorespond = false
+if (!('antitoxic' in chat)) chat.antitoxic = false
 if (!('game' in chat)) chat.game = true
 if (!('game2' in chat)) chat.game2 = true
 if (!('simi' in chat)) chat.simi = false
 if (!('antiTraba' in chat)) chat.antiTraba = true
 if (!('primaryBot' in chat)) chat.primaryBot = null
-if (!('autolevelup' in chat))  chat.autolevelup = true
+if (!('autolevelup' in chat))  chat.autolevelup = false
 if (!isNumber(chat.expired)) chat.expired = 0
 if (!('horarioNsfw' in chat)) { 
 chat.horarioNsfw = {
@@ -1048,17 +1049,17 @@ antiDiscord: false,
 antiThreads: false,
 antiTwitch: false,
 antifake: false,
-reaction: true,
+reaction: false,
 viewonce: false,
 modoadmin: false,
-autorespond: true,
-antitoxic: true,
+autorespond: false,
+antitoxic: false,
 game: true, 
 game2: true, 
 simi: false,
 antiTraba: true,
 primaryBot: null,
-autolevelup: true,
+autolevelup: false,
 expired: 0,
 horarioNsfw: {
 inicio: "00:00", 
@@ -1076,10 +1077,10 @@ if (!('temporal' in settings)) settings.temporal = false
 if (!('anticommand' in settings)) settings.anticommand = false
 if (!('antiPrivate' in settings)) settings.antiPrivate = false
 if (!('antiCall' in settings)) settings.antiCall = true
-if (!('antiSpam' in settings)) settings.antiSpam = true 
+if (!('antiSpam' in settings)) settings.antiSpam = false 
 if (!('modoia' in settings)) settings.modoia = false
-if (!('jadibotmd' in settings)) settings.jadibotmd = true 
-if (!('prefix' in settings)) settings.prefix = opts['prefix'] || '*/i!#$%+£¢€¥^°=¶∆×÷π√✓©®&.\\-.@';
+if (!('jadibotmd' in settings)) settings.jadibotmd = false 
+if (!('prefix' in settings)) settings.prefix = opts['prefix'] || '*/i!#$%+£¢€¥^°=¶∆×÷π√✓©®&.\\-.@Aa';
 } else global.db.data.settings[this.user.jid] = {
 self: false,
 autoread: false,
@@ -1088,18 +1089,18 @@ restrict: false,
 temporal: false,
 antiPrivate: false,
 antiCall: true,
-antiSpam: true,
+antiSpam: false,
 modoia: false, 
 anticommand: false, 
-prefix: opts['prefix'] || '*/i!#$%+£¢€¥^°=¶∆×÷π√✓©®&.\\-.@',
-jadibotmd: true,
+prefix: opts['prefix'] || '*/i!#$%+£¢€¥^°=¶∆×÷π√✓©®&.\\-.@Aa',
+jadibotmd: false,
 }} catch (e) {
 console.error(e)
 }
 
 var settings = global.db.data.settings[this.user.jid];
 let prefix;
-const defaultPrefix = '*/i!#$%+£¢€¥^°=¶∆×÷π√✓©®&.\\-.@'; // Valor por defecto
+const defaultPrefix = '*/i!#$%+£¢€¥^°=¶∆×÷π√✓©®&.\\-.@Aa'; // Valor por defecto
 if (settings.prefix) {
 if (settings.prefix.includes(',')) {
 const prefixes = settings.prefix.split(',').map(p => p.trim());
@@ -1304,19 +1305,19 @@ if (xp > 2000)
 m.reply('Exp limit') // Hehehe
 else               
 if (!isPrems && plugin.money && global.db.data.users[m.sender].money < plugin.money * 1) {
-//this.reply(m.chat, `🐈 𝙉𝙊 𝙏𝙄𝙀𝙉𝙀 𝙂𝘼𝙏𝘼𝘾𝙊𝙄𝙉𝙎`, m)
-this.sendMessage(m.chat, {text: `🐈 𝙉𝙊 𝙏𝙄𝙀𝙉𝙀 𝙂𝘼𝙏𝘼𝘾𝙊𝙄𝙉𝙎`,  contextInfo: {externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, title: gt, body: ' 😻 𝗦𝘂𝗽𝗲𝗿 𝗚𝗮𝘁𝗮𝗕𝗼𝘁-𝗠𝗗 - 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 ', previewType: 0, thumbnail: gataImg, sourceUrl: accountsgb }}}, { quoted: m })         
+//this.reply(m.chat, ` NO TIENE COINS`, m)
+this.sendMessage(m.chat, {text: ` NO TIENE COINS `,  contextInfo: {externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, title: gt, body: wm, previewType: 0, thumbnail: gataImg, sourceUrl: accountsgb }}}, { quoted: m })         
 continue     
 }
 			
 m.exp += xp
 if (!isPrems && plugin.limit && global.db.data.users[m.sender].limit < plugin.limit * 1) {
-this.sendMessage(m.chat, {text: `${lenguajeGB['smsCont7']()} *${usedPrefix}buy*`,  contextInfo: {externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, title: gt, body: ' 😻 𝗦𝘂𝗽𝗲𝗿 𝗚𝗮𝘁𝗮𝗕𝗼𝘁-𝗠𝗗 - 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 ', previewType: 0, thumbnail: gataImg, sourceUrl: accountsgb }}}, { quoted: m })         
+this.sendMessage(m.chat, {text: `${lenguajeGB['smsCont7']()} *${usedPrefix}buy*`,  contextInfo: {externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, title: gt, body: wm, previewType: 0, thumbnail: gataImg, sourceUrl: accountsgb }}}, { quoted: m })         
 //this.reply(m.chat, `${lenguajeGB['smsCont7']()} *${usedPrefix}buy*`, m)
 continue //Sin límite
 }
 if (plugin.level > _user.level) {
-this.sendMessage(m.chat, {text: `${lenguajeGB['smsCont9']()} *${plugin.level}* ${lenguajeGB['smsCont10']()} *${_user.level}* ${lenguajeGB['smsCont11']()} *${usedPrefix}nivel*`,  contextInfo: {externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, title: gt, body: ' 😻 𝗦𝘂𝗽𝗲𝗿 𝗚𝗮𝘁𝗮𝗕𝗼𝘁-𝗠𝗗 - 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 ', previewType: 0, thumbnail: gataImg, sourceUrl: accountsgb }}}, { quoted: m })         
+this.sendMessage(m.chat, {text: `${lenguajeGB['smsCont9']()} *${plugin.level}* ${lenguajeGB['smsCont10']()} *${_user.level}* ${lenguajeGB['smsCont11']()} *${usedPrefix}nivel*`,  contextInfo: {externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, title: gt, body: wm, previewType: 0, thumbnail: gataImg, sourceUrl: accountsgb }}}, { quoted: m })         
 //this.reply(m.chat, `${lenguajeGB['smsCont9']()} *${plugin.level}* ${lenguajeGB['smsCont10']()} *${_user.level}* ${lenguajeGB['smsCont11']()} *${usedPrefix}nivel*`, m)
 continue // Si no se ha alcanzado el nivel
 }
@@ -1381,7 +1382,7 @@ if (m.limit)
 m.reply(+m.limit + lenguajeGB.smsCont8())
 }
 if (m.money)
-m.reply(+m.money + ' 𝙂𝘼𝙏𝘼𝘾𝙊𝙄𝙉𝙎 🐱 𝙐𝙎𝘼𝘿𝙊(𝙎)')  
+m.reply(+m.money + ' COINS USADOS')  
 break
 }}} catch (e) {
 console.error(e)
@@ -1453,65 +1454,43 @@ function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]
  * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['group-participants.update']} groupsUpdate 
  */
 export async function participantsUpdate({ id, participants, action }) {
-if (opts['self'])
-return
-// if (id in conn.chats) return // First login will spam
-if (this.isInit)
-return
-if (global.db.data == null)
-await loadDatabase()
-let chat = global.db.data.chats[id] || {}
-let text = ''
-switch (action) {
-case 'add':
-case 'remove':
-if (chat.welcome) {
-let groupMetadata = await this.groupMetadata(id) || (conn.chats[id] || {}).metadata
-for (let user of participants) {
-let pp = global.gataImg
-try {
-pp = await this.profilePictureUrl(user, 'image')
-} catch (e) {
-} finally {
-let apii = await this.getFile(pp)                                      
-const botTt2 = groupMetadata.participants.find(u => this.decodeJid(u.id) == this.user.jid) || {} 
-const isBotAdminNn = botTt2?.admin === "admin" || false
-text = (action === 'add' ? (chat.sWelcome || this.welcome || conn.welcome || 'Welcome, @user!').replace('@subject', await this.getName(id)).replace('@desc', groupMetadata.desc?.toString() || '😻 𝗦𝘂𝗽𝗲𝗿 𝗚𝗮𝘁𝗮𝗕𝗼𝘁-𝗠𝗗 😻') :
-(chat.sBye || this.bye || conn.bye || 'Bye, @user!')).replace('@user', '@' + user.split('@')[0])
-			    
-if (chat.antifake && isBotAdminNn && action === 'add') {
-const prefijosPredeterminados = [2, 4, 6, 7, 8, 9] // Puedes personalizar los prefijos de los usuarios que deseas eliminar, especificando los que deben ser bloqueados si el número empieza con alguno de ellos.
-let prefijos = (Array.isArray(chat.sCondition) && chat.sCondition.length > 0) || chat.sCondition !== "" ? chat.sCondition : prefijosPredeterminados
-const comienzaConPrefijo = prefijos.some(prefijo => user.startsWith(`+${prefijo}`))
-if (comienzaConPrefijo) {
-let texto = mid.mAdvertencia + mid.mFake2(user)
-await conn.sendMessage(id, { text: texto, mentions: [user] })
-if (m.key.participant && m.key.id) {
-await conn.sendMessage(id, { delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }})
-}
-//let responseb = await conn.groupParticipantsUpdate(id, [user], 'remove')
-//if (responseb[0].status === "404") return
-}}
-	
-let fkontak2 = { "key": { "participants":"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, "message": { "contactMessage": { "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${user.split('@')[0]}:${user.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, "participant": "0@s.whatsapp.net" }      
-this.sendMessage(id, { text: text, 
-contextInfo:{
-forwardingScore: 9999999,
-isForwarded: true, 
-mentionedJid:[user],
-"externalAdReply": {
-"showAdAttribution": true,
-"renderLargerThumbnail": true,
-"thumbnail": apii.data, 
-"title": [wm, '😻 𝗦𝘂𝗽𝗲𝗿 ' + gt + ' 😻', '🌟 centergatabot.gmail.com'].getRandom(),
-"containsAutoReply": true,
-"mediaType": 1, 
-sourceUrl: 'https://github.com/GataNina-Li/GataBot-MD' }}}, { quoted: fkontak2 })
-apii.data = ''
-//this.sendFile(id, apii.data, 'pp.jpg', text, null, false, { mentions: [user] }, { quoted: fkontak2 })
-}}}
-			    
-break
+  const m = mconn
+  if (opts['self']) return;
+  //if (m.conn.isInit) return;
+  if (global.db.data == null) await loadDatabase();
+  const chat = global.db.data.chats[id] || {};
+  const botTt = global.db.data.settings[mconn?.conn?.user?.jid] || {};
+  let text = '';
+  switch (action) {
+    case 'add':
+    case 'remove':
+      if (chat.welcome && !chat?.isBanned) {
+        const groupMetadata = await m?.conn?.groupMetadata(id) || (conn?.chats[id] || {}).metadata;
+        for (const user of participants) {
+          let pp = './src/avatar_contact.png';
+          try {
+            pp = await m.conn.profilePictureUrl(user, 'image');
+          } catch (e) {
+          } finally {
+            const apii = await mconn?.conn?.getFile(pp);
+            const antiArab = JSON.parse(fs.readFileSync('./src/antiArab.json'));
+            const userPrefix = antiArab.some((prefix) => user.startsWith(prefix));
+            const botTt2 = groupMetadata?.participants?.find((u) => m?.conn?.decodeJid(u.id) == m?.conn?.user?.jid) || {};
+            const isBotAdminNn = botTt2?.admin === 'admin' || false;
+            text = (action === 'add' ? (chat.sWelcome || conn.welcome || 'Welcome, @user!').replace('@subject', await m?.conn?.getName(id)).replace('@desc', groupMetadata.desc?.toString() || '*𝚂𝙸𝙽 𝙳𝙴𝚂𝙲𝚁𝙸𝙿𝙲𝙸𝙾𝙽*') :
+              (chat.sBye || conn.bye || 'Bye, @user!')).replace('@user', '@' + user.split('@')[0]);
+            if (userPrefix && chat.antiArab && botTt.restrict && isBotAdminNn && action === 'add') {
+              const responseb = await m.conn.groupParticipantsUpdate(id, [user], 'remove');
+              if (responseb[0].status === '404') return;
+              const fkontak2 = { "key": { "participants":"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, "message": { "contactMessage": { "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${user.split('@')[0]}:${user.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, "participant": "0@s.whatsapp.net" }
+              await m?.conn?.sendMessage(id, { text: `*[❗] @${user.split('@')[0]} ᴇɴ ᴇsᴛᴇ ɢʀᴜᴘᴏ ɴᴏ sᴇ ᴘᴇʀᴍɪᴛᴇɴ ɴᴜᴍᴇʀᴏs ᴀʀᴀʙᴇs ᴏ ʀᴀʀᴏs, ᴘᴏʀ ʟᴏ ϙᴜᴇ sᴇ ᴛᴇ sᴀᴄᴀʀᴀ ᴅᴇʟ ɢʀᴜᴘᴏ*`, mentions: [user] }, { quoted: fkontak2 });
+              return;
+            }
+            await m?.conn?.sendFile(id, apii.data, 'pp.jpg', text, null, false, { mentions: [user] });
+          }
+        }
+      }
+      break;
 case 'promote':
 case 'daradmin':
 case 'darpoder':
@@ -1598,7 +1577,7 @@ restrict: lenguajeGB['smsRestrict'](),
 //if (msg) return m.reply(msg)
 	
 let tg = { quoted: m, userJid: conn.user.jid }
-let prep = generateWAMessageFromContent(m.chat, { extendedTextMessage: { text: msg, contextInfo: { externalAdReply: { title: lenguajeGB.smsAvisoAG().slice(0,-2), body: [wm, '😻 𝗦𝘂𝗽𝗲𝗿 ' + gt + ' 😻', '🌟 centergatabot.gmail.com'].getRandom(), thumbnail: gataImg, sourceUrl: accountsgb }}}}, tg)
+let prep = generateWAMessageFromContent(m.chat, { extendedTextMessage: { text: msg, contextInfo: { externalAdReply: { title: lenguajeGB.smsAvisoAG().slice(0,-2), body: wm, thumbnail: gataImg, sourceUrl: accountsgb }}}}, tg)
 if (msg) return conn.relayMessage(m.chat, prep.message, { messageId: prep.key.id })
 }
 
