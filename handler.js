@@ -1294,7 +1294,7 @@ if (plugin.private && m.isGroup) { //Solo chat privado
 fail('private', m, this)
 continue
 }
-if (plugin.register == true && _user.registered == false) { // user registrado? 
+if (plugin.register == false && _user.registered == false) { // user registrado? 
 fail('unreg', m, this)
 continue
 }
