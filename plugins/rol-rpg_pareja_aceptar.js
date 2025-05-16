@@ -87,7 +87,7 @@ let fkontak = { "key": { "participants":"0@s.whatsapp.net", "remoteJid": "status
 let grupos = [grupo1, grupo2, grupo3, grupo4, grupo5, grupo6].getRandom()
 let gata = [img6, img7, img8, img9].getRandom()
 let enlace = { contextInfo: { externalAdReply: {title: wm + ' 🐈', body: 'support group' , sourceUrl: grupos, thumbnail: await(await fetch('https://telegra.ph/file/bb6768e019760933dadc7.jpg')).buffer() }}}
-let enlace2 = { contextInfo: { externalAdReply: { showAdAttribution: true, mediaUrl: yt, mediaType: 'VIDEO', description: '', title: wm, body: '😻 𝗦𝘂𝗽𝗲𝗿 𝗚𝗮𝘁𝗮𝗕𝗼𝘁-𝗠𝗗 - 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 ', thumbnailUrl: await(await fetch('https://telegra.ph/file/bb6768e019760933dadc7.jpg')).buffer(), sourceUrl: yt }}}
+let enlace2 = { contextInfo: { externalAdReply: { showAdAttribution: true, mediaUrl: yt, mediaType: 'VIDEO', description: '', title: wm, body: wm, thumbnailUrl: await(await fetch('https://qu.ax/ZJKqt.jpg')).buffer(), sourceUrl: yt }}}
 let dos = [enlace, enlace2]
 
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
@@ -134,7 +134,7 @@ return await conn.sendMessage(m.chat, {image: { url: "https://telegra.ph/file/bb
   externalAdReply: {
     title: 'Pareja - aceptar ',
     body: gt,
-    thumbnail: await(await fetch('https://telegra.ph/file/bb6768e019760933dadc7.jpg')).buffer(),
+    thumbnail: await(await fetch('https://qu.ax/ZJKqt.jpg')).buffer(),
     sourceUrl: md,
     mediaType: 1,
     renderLargerThumbnail: false,
