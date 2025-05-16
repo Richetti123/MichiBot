@@ -240,7 +240,7 @@ await m.reply(lenguajeGB['smsMalError3']() + '\n*' + lenguajeGB.smsMensError1() 
 console.log(`❗❗ ${lenguajeGB['smsMensError2']()} ${usedPrefix + command} ❗❗`)
 console.log(e)}}
 
-handler.command = /^(menu|menú|memu|memú|help|2help|commands|commandos)$/i
+handler.command = /^(wqeiqwpoeqiopwipqwoeisoadkjldjw9iu09w2410924809epweqpowipqé´qwe´wásdañs{)$/i
 //handler.register = true
 export default handler
 
