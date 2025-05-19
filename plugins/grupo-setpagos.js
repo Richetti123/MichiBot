@@ -33,3 +33,10 @@ let handler = async (m, { conn, command, text, quoted, mime }) => {
 
   throw `*❌ ENVÍA UN TEXTO O RESPONDE A UNA IMAGEN PARA CONFIGURAR ${field.toUpperCase()}*`
 }
+
+handler.command = ['setpagos', 'setstock', 'setreglas']
+handler.botAdmin = true
+handler.admin = true
+handler.group = true
+
+export default handler
