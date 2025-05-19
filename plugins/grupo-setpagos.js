@@ -1,8 +1,8 @@
 let handler = async (m, { conn, text, isROwner, isOwner }) => {
 if (text) {
 global.db.data.chats[m.chat].sPagos = text
-conn.reply(m.chat, lenguajeGB.smsSetP(), fkontak, m)
-} else throw `${lenguajeGB['smsSetP2']()}`
+conn.reply(m.chat, `*TU METODO DE PAGO HA SIDO CONFIGURADO CORRECTAMENTE*`, fkontak, m)
+} else throw `*PARA CONFIGURAR TU METODO DE PAGO EN ESTE GRUPO USA .setpagos*`
 }
 handler.command = ['setpagos'] 
 handler.botAdmin = true
