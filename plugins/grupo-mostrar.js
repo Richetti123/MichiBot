@@ -2,9 +2,9 @@ let handler = async (m, { conn, usedPrefix, command, args: [event], text }) => {
   if (!event) {
     return await m.reply(`${mid.smsMalused7}
 
-${usedPrefix + command} stock @user
-${usedPrefix + command} pagos @user
-${usedPrefix + command} reglas @user`)
+${usedPrefix + command} stock
+${usedPrefix + command} pagos
+${usedPrefix + command} reglas`)
   }
 
   let mentions = text.replace(event, '').trimStart()
@@ -21,7 +21,7 @@ ${usedPrefix + command} reglas @user`)
       act = eventName
       break
     default:
-      throw '❌ Opción inválida. Usa: stock, pagos o reglas.'
+      throw '╰⊱❗️⊱ *ACCIÓN MAL USADA* ⊱❗️⊱╮\n\nUsa: stock, pagos o reglas.'
   }
 
   let chatData = global.db.data.chats[m.chat] || {}
