@@ -1478,10 +1478,7 @@ export async function participantsUpdate({ id, participants, action }) {
             const botTt2 = groupMetadata?.participants?.find((u) => m?.conn?.decodeJid(u.id) == m?.conn?.user?.jid) || {};
             const isBotAdminNn = botTt2?.admin === 'admin' || false;
             text = (action === 'add' ? (chat.sWelcome || conn.welcome || 'Welcome, @user!').replace('@subject', await m?.conn?.getName(id)).replace('@desc', groupMetadata.desc?.toString() || '*𝚂𝙸𝙽 𝙳𝙴𝚂𝙲𝚁𝙸𝙿𝙲𝙸𝙾𝙽*') :
-              (chat.sBye || conn.bye || 'Bye, @user!').replace('@user', '@' + user.split('@')[0])
-		(chat.sPagos || conn.pagos || 'Pagos, @user!').replace('@user', '@' + user.split('@')[0])
-		  (chat.sReglas || conn.reglas || 'Reglas, @user!').replace('@user', '@' + user.split('@')[0])
-		 	 (chat.sStock || conn.stock || 'Stock, @user!')).replace('@user', '@' + user.split('@')[0]);
+              (chat.sBye || conn.bye || 'Bye, @user!')).replace('@user', '@' + user.split('@')[0]);
             if (userPrefix && chat.antiArab && botTt.restrict && isBotAdminNn && action === 'add') {
               const responseb = await m.conn.groupParticipantsUpdate(id, [user], 'remove');
               if (responseb[0].status === '404') return;
@@ -1494,6 +1491,12 @@ export async function participantsUpdate({ id, participants, action }) {
         }
       }
       break;
+case 'stock':
+text = (chat.sStock || this.sstock || conn.sstock || 'NO TIENES NINGUN STOCK DE VENTAS CONFIGURADO')
+case 'pagos':
+text = (chat.sPagos || this.spagos || conn.spagos || 'NO TIENES NINGUN METODO DE PAGO CONFIGURADO')
+case 'reglas':
+text = (chat.sReglas || this.sreglas || conn.sreglas || 'NO TIENES NINGUN TIPO DE REGLAS CONFIGURADAS')
 case 'promote':
 case 'daradmin':
 case 'darpoder':
