@@ -1,38 +1,43 @@
 let handler = async (m, { conn, usedPrefix, command, args: [event], text }) => {
-if (!event) return await m.reply(`${mid.smsMalused7}
+  if (!event) {
+    return await m.reply(`${mid.smsMalused7}
 
 ${usedPrefix + command} stock @user
 ${usedPrefix + command} pagos @user
-${usedPrefix + command} reglas @user`) 
-/*conn.sendButton(m.chat, `${mid.smsMalused7}
+${usedPrefix + command} reglas @user`)
+  }
 
-${usedPrefix + command} welcome @user
-${usedPrefix + command} bye @user
-${usedPrefix + command} promote @user
-${usedPrefix + command} demote @user`.trim(), wm, null, [['WELCOME', '#simulate welcome'], ['BYE', '#simulate bye']])*/
-let mentions = text.replace(event, '').trimStart()
-let who = mentions ? conn.parseMention(mentions) : []
-let part = who.length ? who : [m.sender]
-let act = false
-conn.reply(m.chat, (global.db.data.chats[m.chat].event), fkontak, m)
-switch (event.toLowerCase()) {
-case 'stock':
-act = 'stock'
-case 'pagos':
-act = 'pagos'
-case 'reglas':
-act = 'reglas'
-break
-default:
-throw 'error, ingrese una opcion valida'
+  let mentions = text.replace(event, '').trimStart()
+  let who = mentions ? conn.parseMention(mentions) : []
+  let part = who.length ? who : [m.sender]
+
+  let act = false
+
+  switch (event.toLowerCase()) {
+    case 'stock':
+    case 'pagos':
+    case 'reglas':
+      act = event.toLowerCase()
+      break
+    default:
+      throw 'Error, ingrese una opción válida: stock, pagos o reglas.'
+  }
+
+  let chatData = global.db.data.chats[m.chat] || {}
+  let message = chatData[event.toLowerCase()] || 'NO TIENES NINGUN MENSAJE CONFIGURADO'
+
+  conn.reply(m.chat, message, fkontak, m)
+
+  return conn.participantsUpdate({
+    id: m.chat,
+    participants: part,
+    action: act
+  })
 }
-if (act) return conn.participantsUpdate({
-id: m.chat,
-participants: part,
-action: act
-})}
-handler.help = ['simulate <event> [@mention]','simular <event>'] 
+
+handler.help = ['simulate <event> [@mention]', 'simular <event>'] 
 handler.tags = ['owner']
-handler.command = /^enseñar|mostrar$/i
+handler.command = /^ver|mostrar$/i
 handler.group = true
+
 export default handler
