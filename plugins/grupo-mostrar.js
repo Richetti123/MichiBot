@@ -46,7 +46,7 @@ PARA HACERLO ESCRIBE *.set${eventName}*`
 
 handler.help = ['simulate <event> [@mention]', 'simular <event>'] 
 handler.tags = ['owner']
-handler.command = /^enseñar|mostrar$/i
+handler.command = /^ver|mostrar$/i
 handler.group = true
 
 export default handler
