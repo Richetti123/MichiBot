@@ -25,18 +25,30 @@ ${usedPrefix + command} reglas`)
   }
 
   let chatData = global.db.data.chats[m.chat] || {}
-  let content = chatData[eventName]
+  let saved = chatData[eventName]
 
-  if (!content || content.trim() === '') {
-    content = `╰⊱❌⊱ *ERROR* ⊱❌⊱╮
+  if (!saved || !saved.content) {
+    let fallback = `╰⊱❌⊱ *ERROR* ⊱❌⊱╮
 
 NO TIENES NINGÚN MENSAJE CONFIGURADO
 
 PARA HACERLO ESCRIBE *.set${eventName}*`
+    return conn.reply(m.chat, fallback, fkontak, m)
   }
 
-  conn.reply(m.chat, content, fkontak, m)
+  // Enviar según el tipo de contenido
+  if (saved.type === 'image') {
+    try {
+      let buffer = Buffer.from(saved.content, 'base64')
+      await conn.sendFile(m.chat, buffer, `${eventName}.jpg`, '', m, false, { quoted: fkontak })
+    } catch (e) {
+      return conn.reply(m.chat, `❌ Error al enviar la imagen configurada para *${eventName}*.`, m)
+    }
+  } else {
+    await conn.reply(m.chat, saved.content, fkontak, m)
+  }
 
+  // Acción simulada (stock, pagos, reglas)
   return conn.participantsUpdate({
     id: m.chat,
     participants: part,
@@ -44,7 +56,7 @@ PARA HACERLO ESCRIBE *.set${eventName}*`
   })
 }
 
-handler.help = ['simulate <event> [@mention]', 'simular <event>'] 
+handler.help = ['simulate <event> [@mention]', 'simular <event>']
 handler.tags = ['owner']
 handler.command = /^ver|mostrar$/i
 handler.group = true
