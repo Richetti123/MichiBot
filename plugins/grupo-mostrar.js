@@ -40,7 +40,7 @@ USA *.set${eventName}* PARA CONFIGURAR`
   if (saved.type === 'image') {
     try {
       let buffer = Buffer.from(saved.content, 'base64')
-      await conn.sendFile(m.chat, buffer, `${eventName}.jpg`, `📌 *${eventName.toUpperCase()}*`, m)
+      await conn.sendFile(m.chat, buffer, `${eventName}.jpg`, `AQUI TIENES TU IMAGEN DE *${eventName.toUpperCase()}*`, m)
     } catch (e) {
       return conn.reply(m.chat, `❌ Error al enviar la imagen configurada para *${eventName}*.`, m)
     }
