@@ -14,7 +14,7 @@ let mentions = text.replace(event, '').trimStart()
 let who = mentions ? conn.parseMention(mentions) : []
 let part = who.length ? who : [m.sender]
 let act = false
-conn.reply(m.chat, (global.db.data.chats[m.chat].reglas), fkontak, m)
+conn.reply(m.chat, (global.db.data.chats[m.chat].pagos), fkontak, m)
 switch (event.toLowerCase()) {
 case 'stock':
 act = 'stock'
