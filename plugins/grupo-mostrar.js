@@ -1,6 +1,6 @@
 let handler = async (m, { conn, usedPrefix, command, args: [event], text }) => {
   if (!event) {
-    return await m.reply(`${mid.smsMalused7}
+    return m.reply(`${mid.smsMalused7}
 
 ${usedPrefix + command} stock
 ${usedPrefix + command} pagos
@@ -32,23 +32,26 @@ ${usedPrefix + command} reglas`)
 
 NO TIENES NINGÚN MENSAJE CONFIGURADO
 
-PARA HACERLO ESCRIBE *.set${eventName}*`
-    return conn.reply(m.chat, fallback, fkontak, m)
+USA *.set${eventName}* PARA CONFIGURAR`
+    return conn.reply(m.chat, fallback, m)
   }
 
-  // Enviar según el tipo de contenido
+  // Enviar imagen si está configurada
   if (saved.type === 'image') {
     try {
       let buffer = Buffer.from(saved.content, 'base64')
-      await conn.sendFile(m.chat, buffer, `${eventName}.jpg`, '', m, false, { quoted: fkontak })
+      await conn.sendFile(m.chat, buffer, `${eventName}.jpg`, `📌 *${eventName.toUpperCase()}*`, m)
     } catch (e) {
       return conn.reply(m.chat, `❌ Error al enviar la imagen configurada para *${eventName}*.`, m)
     }
-  } else {
-    await conn.reply(m.chat, saved.content, fkontak, m)
   }
 
-  // Acción simulada (stock, pagos, reglas)
+  // Enviar texto si está configurado
+  if (saved.type === 'text') {
+    await conn.reply(m.chat, saved.content, m)
+  }
+
+  // Simular acción (opcional, si quieres que se haga algo con los usuarios)
   return conn.participantsUpdate({
     id: m.chat,
     participants: part,
@@ -56,7 +59,7 @@ PARA HACERLO ESCRIBE *.set${eventName}*`
   })
 }
 
-handler.help = ['simulate <event> [@mention]', 'simular <event>']
+handler.help = ['ver <evento> [@mención]', 'mostrar <evento>']
 handler.tags = ['owner']
 handler.command = /^ver|mostrar$/i
 handler.group = true
