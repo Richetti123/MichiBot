@@ -12,21 +12,30 @@ ${usedPrefix + command} reglas @user`)
   let part = who.length ? who : [m.sender]
 
   let act = false
+  let eventName = event.toLowerCase()
 
-  switch (event.toLowerCase()) {
+  switch (eventName) {
     case 'stock':
     case 'pagos':
     case 'reglas':
-      act = event.toLowerCase()
+      act = eventName
       break
     default:
-      throw 'Error, ingrese una opción válida: stock, pagos o reglas.'
+      throw '❌ Opción inválida. Usa: stock, pagos o reglas.'
   }
 
   let chatData = global.db.data.chats[m.chat] || {}
-  let message = chatData[event.toLowerCase()] || 'NO TIENES NINGUN MENSAJE CONFIGURADO'
+  let content = chatData[eventName]
 
-  conn.reply(m.chat, message, fkontak, m)
+  if (!content || content.trim() === '') {
+    content = `╰⊱❌⊱ *ERROR* ⊱❌⊱╮
+
+NO TIENES NINGÚN MENSAJE CONFIGURADO
+
+PARA HACERLO ESCRIBE *.set${eventName}*`
+  }
+
+  conn.reply(m.chat, content, fkontak, m)
 
   return conn.participantsUpdate({
     id: m.chat,
@@ -37,7 +46,7 @@ ${usedPrefix + command} reglas @user`)
 
 handler.help = ['simulate <event> [@mention]', 'simular <event>'] 
 handler.tags = ['owner']
-handler.command = /^ver|mostrar$/i
+handler.command = /^enseñar|mostrar$/i
 handler.group = true
 
 export default handler
