@@ -753,7 +753,7 @@ await fsPromises.unlink(filePath);
 
 /*function purgeSession() {
 let prekey = []
-let directorio = readdirSync("./GataBotSession")
+let directorio = readdirSync("./MichiBot")
 let filesFolderPreKeys = directorio.filter(file => {
 return file.startsWith('pre-key-')
 })
@@ -786,7 +786,7 @@ console.log(chalk.bold.cyanBright(lenguajeGB.smspurgeSessionSB2()))
 console.log(chalk.bold.red(lenguajeGB.smspurgeSessionSB3() + err))
 }}
 function purgeOldFiles() {
-const directories = ['./GataBotSession/', './GataJadiBot/']
+const directories = ['./MichiBot/', './GataJadiBot/']
 directories.forEach(dir => {
 readdirSync(dir, (err, files) => {
 if (err) throw err
