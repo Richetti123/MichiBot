@@ -1,65 +1,49 @@
-let handler = async (m, { conn, usedPrefix, command, args: [event], text }) => {
-  if (!event) {
-    return m.reply(`${mid.smsMalused7}
+let handler = async (m, { conn, usedPrefix, command, args, text }) => {
+  const [eventNameRaw, userMention] = args
+  const eventName = eventNameRaw ? eventNameRaw.toLowerCase() : null
 
-${usedPrefix + command} stock
+  const validEvents = ['pagos', 'stock', 'reglas']
+  if (!eventName || !validEvents.includes(eventName)) {
+    return m.reply(`╰⊱❌⊱ *USO INCORRECTO* ⊱❌⊱╮
+
+Ejemplos:
 ${usedPrefix + command} pagos
-${usedPrefix + command} reglas`)
+${usedPrefix + command} stock @usuario`)
   }
 
-  let mentions = text.replace(event, '').trimStart()
-  let who = mentions ? conn.parseMention(mentions) : []
-  let part = who.length ? who : [m.sender]
-
-  let act = false
-  let eventName = event.toLowerCase()
-
-  switch (eventName) {
-    case 'stock':
-    case 'pagos':
-    case 'reglas':
-      act = eventName
-      break
-    default:
-      throw '╰⊱❗️⊱ *ACCIÓN MAL USADA* ⊱❗️⊱╮\n\nUsa: stock, pagos o reglas.'
-  }
+  let userId = userMention
+    ? userMention.replace(/[@+]/g, '').split('@')[0]
+    : m.sender.split('@')[0]
 
   let chatData = global.db.data.chats[m.chat] || {}
-  let saved = chatData[eventName]
+  let dataByType = chatData[eventName] || {}
+  let entry = dataByType[userId]
 
-  if (!saved || !saved.content) {
-    let fallback = `╰⊱❌⊱ *ERROR* ⊱❌⊱╮
-
-NO TIENES NINGÚN MENSAJE CONFIGURADO
-
-USA *.set${eventName}* PARA CONFIGURAR`
-    return conn.reply(m.chat, fallback, m)
+  if (!entry || !entry.content) {
+    return conn.reply(m.chat, `╰⊱❌⊱ *NO CONFIGURADO* ⊱❌⊱╮\n\nNo se encontró ${eventName.toUpperCase()} configurado para *${userId}*.`, m)
   }
 
-  // Enviar imagen si está configurada
-  if (saved.type === 'image') {
+  if (entry.type === 'image') {
     try {
-      let buffer = Buffer.from(saved.content, 'base64')
-      await conn.sendFile(m.chat, buffer, `${eventName}.jpg`, `╰⊱💚⊱ ÉXITO ⊱💚⊱╮\n\nAQUI TIENES TU IMAGEN DE *${eventName.toUpperCase()}*`, m)
-    } catch (e) {
-      return conn.reply(m.chat, `╰⊱❌⊱ *ERROR* ⊱❌⊱╮\n\n❌ Error al enviar la imagen configurada para *${eventName}*.`, m)
+      let buffer = Buffer.from(entry.content, 'base64')
+      await conn.sendFile(
+        m.chat,
+        buffer,
+        `${eventName}-${userId}.jpg`,
+        `📌 *${eventName.toUpperCase()} de ${userId}*`,
+        m
+      )
+    } catch {
+      return conn.reply(m.chat, `╰⊱❌⊱ *ERROR* ⊱❌⊱╮\n\nError al enviar la imagen configurada para *${userId}*.`, m)
     }
   }
 
-  // Enviar texto si está configurado
-  if (saved.type === 'text') {
-    await conn.reply(m.chat, saved.content, m)
+  if (entry.type === 'text') {
+    return conn.reply(m.chat, entry.content, m)
   }
-
-  // Simular acción (opcional, si quieres que se haga algo con los usuarios)
-  return conn.participantsUpdate({
-    id: m.chat,
-    participants: part,
-    action: act
-  })
 }
 
-handler.help = ['ver <evento> [@mención]', 'mostrar <evento>']
+handler.help = ['ver <evento> [@usuario]', 'mostrar <evento>']
 handler.tags = ['owner']
 handler.command = /^ver|mostrar$/i
 handler.group = true
