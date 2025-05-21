@@ -7,8 +7,9 @@ let handler = async (m, { conn, usedPrefix, command, args, text }) => {
     return m.reply(`╰⊱❌⊱ *USO INCORRECTO* ⊱❌⊱╮
 
 Ejemplos:
-${usedPrefix + command} pagos
-${usedPrefix + command} stock @usuario`)
+${usedPrefix + command} pagos @${m.sender.split`@`[0]}
+${usedPrefix + command} stock @${m.sender.split`@`[0]}
+${usedPrefix + command} reglas @${m.sender.split`@`[0]}`, false, {mentions: [m.sender]})
   }
 
   let userId = userMention
@@ -20,7 +21,7 @@ ${usedPrefix + command} stock @usuario`)
   let entry = dataByType[userId]
 
   if (!entry || !entry.content) {
-    return conn.reply(m.chat, `╰⊱❌⊱ *NO CONFIGURADO* ⊱❌⊱╮\n\nNo se encontró ${eventName.toUpperCase()} configurado para *${userId}*.`, m)
+    return conn.reply(m.chat, `╰⊱❌⊱ *NO CONFIGURADO* ⊱❌⊱╮\n\nNo se encontró ${eventName.toUpperCase()} configurado para *@${userId}*.`, false, {mentions: [m.sender]}, m)
   }
 
   if (entry.type === 'image') {
@@ -34,7 +35,7 @@ ${usedPrefix + command} stock @usuario`)
         m
       )
     } catch {
-      return conn.reply(m.chat, `╰⊱❌⊱ *ERROR* ⊱❌⊱╮\n\nError al enviar la imagen configurada para *${userId}*.`, m)
+      return conn.reply(m.chat, `╰⊱❌⊱ *ERROR* ⊱❌⊱╮\n\nError al enviar la imagen configurada para *@${userId}*.`, false, {mentions: [m.sender]}, m)
     }
   }
 
