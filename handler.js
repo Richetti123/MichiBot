@@ -1154,7 +1154,7 @@ const user = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.send
 const bot = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) == this.user.jid) : {}) || {}
 const isRAdmin = user?.admin == 'superadmin' || false
 const isAdmin = isRAdmin || user?.admin == 'admin' || false //user admins? 
-const isBotAdmin = bot?.admin || false //Detecta sin el bot es admin
+const isBotAdmin = bot?.admin || true //Detecta sin el bot es admin
 m.isWABusiness = global.conn.authState?.creds?.platform === 'smba' || global.conn.authState?.creds?.platform === 'smbi'
 m.isChannel = m.chat.includes('@newsletter') || m.sender.includes('@newsletter')
 	
