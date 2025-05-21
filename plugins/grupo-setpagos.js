@@ -18,12 +18,12 @@ let handler = async (m, { conn, text, command }) => {
     let base64 = buffer.toString('base64')
     chat[field][userId] = { type: 'image', content: base64 }
 
-    return conn.reply(m.chat, `╰⊱💚⊱ ÉXITO ⊱💚⊱╮\n\n╰⊱✅⊱ *CONFIGURACIÓN GUARDADA* ⊱✅⊱╮\n\n✅ Imagen de ${field.toUpperCase()} guardada para *${userId}*.`, m)
+    return conn.reply(m.chat, `╰⊱💚⊱ ÉXITO ⊱💚⊱╮\n\n╰⊱✅⊱ *CONFIGURACIÓN GUARDADA* ⊱✅⊱╮\n\n✅ Imagen de ${field.toUpperCase()} guardada para *@${userId}*.`, false, {mentions: [m.sender]}, m)
   }
 
   if (text?.trim()) {
     chat[field][userId] = { type: 'text', content: text.trim() }
-    return conn.reply(m.chat, `╰⊱💚⊱ ÉXITO ⊱💚⊱╮\n\n╰⊱✅⊱ *CONFIGURACIÓN GUARDADA* ⊱✅⊱╮\n\n✅ Texto de ${field.toUpperCase()} guardado para *${userId}*.`, m)
+    return conn.reply(m.chat, `╰⊱💚⊱ ÉXITO ⊱💚⊱╮\n\n╰⊱✅⊱ *CONFIGURACIÓN GUARDADA* ⊱✅⊱╮\n\n✅ Texto de ${field.toUpperCase()} guardado para *@${userId}*.`, false, {mentions: [m.sender]}, m)
   }
 
   throw `╰⊱❕⊱ *INFORMACIÓN* ⊱❕⊱╮\n\n Envía un texto o responde a una imagen para configurar *${field.toUpperCase()}*.`
