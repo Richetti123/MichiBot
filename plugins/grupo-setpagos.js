@@ -1,16 +1,12 @@
 let handler = async (m, { conn, text, command }) => {
   let field = command.replace(/^set/, '').toLowerCase()
   let validFields = ['pagos', 'stock', 'reglas']
-  if (!validFields.includes(field)) throw '╰⊱❌⊱ *ERROR* ⊱❌⊱╮\n\n*❌ COMANDO INVÁLIDO.*'
-
-  if (!text) throw `╰⊱❕⊱ *INFORMACIÓN* ⊱❕⊱╮\n\nDebes indicar un *nombre* para guardar el contenido de ${field}.`
+  if (!validFields.includes(field)) throw '╰⊱❌⊱ *ERROR* ⊱❌⊱╮\n\n❌ COMANDO INVÁLIDO.'
 
   let chat = global.db.data.chats[m.chat] ||= {}
   chat[field] ||= {}
 
-  let args = text.trim().split(/ +/)
-  let name = args.shift()?.toLowerCase()
-  let value = args.join(' ').trim()
+  let userId = m.sender.split('@')[0] // número del usuario sin @s.whatsapp.net
 
   const q = m.quoted ? m.quoted : m
   const mime = (q.msg || q).mimetype || ''
@@ -20,17 +16,17 @@ let handler = async (m, { conn, text, command }) => {
     if (!buffer) throw '╰⊱❌⊱ *ERROR* ⊱❌⊱╮\n\n❌ No se pudo descargar la imagen.'
 
     let base64 = buffer.toString('base64')
-    chat[field][name] = { type: 'image', content: base64 }
+    chat[field][userId] = { type: 'image', content: base64 }
 
-    return conn.reply(m.chat, `╰⊱💚⊱ ÉXITO ⊱💚⊱╮\n\n✅ *Imagen de ${field.toUpperCase()} (${name}) configurada correctamente.*`, m)
+    return conn.reply(m.chat, `╰⊱💚⊱ ÉXITO ⊱💚⊱╮\n\n╰⊱✅⊱ *CONFIGURACIÓN GUARDADA* ⊱✅⊱╮\n\n✅ Imagen de ${field.toUpperCase()} guardada para *${userId}*.`, m)
   }
 
-  if (value) {
-    chat[field][name] = { type: 'text', content: value }
-    return conn.reply(m.chat, `╰⊱💚⊱ ÉXITO ⊱💚⊱╮\n\n✅ *Texto de ${field.toUpperCase()} (${name}) configurado correctamente.*`, m)
+  if (text?.trim()) {
+    chat[field][userId] = { type: 'text', content: text.trim() }
+    return conn.reply(m.chat, `╰⊱💚⊱ ÉXITO ⊱💚⊱╮\n\n╰⊱✅⊱ *CONFIGURACIÓN GUARDADA* ⊱✅⊱╮\n\n✅ Texto de ${field.toUpperCase()} guardado para *${userId}*.`, m)
   }
 
-  throw `╰⊱❕⊱ *INFORMACIÓN* ⊱❕⊱╮\n\n❌ Envía un texto o responde a una imagen para configurar ${field.toUpperCase()} con un nombre.`
+  throw `╰⊱❕⊱ *INFORMACIÓN* ⊱❕⊱╮\n\n Envía un texto o responde a una imagen para configurar *${field.toUpperCase()}*.`
 }
 
 handler.command = /^set(pagos|stock|reglas)$/i
