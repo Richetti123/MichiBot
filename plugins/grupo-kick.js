@@ -9,7 +9,6 @@ await conn.groupParticipantsUpdate(m.chat, [user], 'remove')}
 handler.command = /^(kick|echar|hechar|sacar|ban)$/i
 handler.admin = true
 handler.group = true
-handler.botAdmin = true
 export default handler
 
 /*let handler = async (m, { conn, participants, command, usedPrefix }) => { 
