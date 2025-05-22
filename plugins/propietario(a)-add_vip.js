@@ -89,7 +89,7 @@ handler.tags = ['owner']
 handler.command = ['addprem', 'userpremium', 'addprem2', 'userpremium2', 'addprem3', 'userpremium3', 'addprem4', 'userpremium4'] 
 handler.group = true
 handler.owner = true
-//handler.botAdmin = true
+//
 export default handler
 
 /*let handler = async (m, { conn, text, command, usedPrefix }) => {//prems 
