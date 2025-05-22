@@ -17,7 +17,6 @@ handler.tags = ['group']
 handler.command = /^(add|agregar|invitar|invite|añadir|\+)$/i
 handler.group = true
 handler.admin = true
-handler.botAdmin = true
 handler.fail = null
 export default handler
 //import fetch from 'node-fetch'
