@@ -33,10 +33,9 @@ async function setHandler(m, { conn, args, command }) {
 
   throw `╰⊱❗️⊱ *USO INCORRECTO* ⊱❗️⊱╮\n\n *Envía un texto o responde a una imagen para configurar ${type.toUpperCase()} con el nombre "${name}".*`;
 }
-setHandler.command = /^set$/i;
-setHandler.group = true;
-setHandler.admin = true;
-setHandler.botAdmin = true;
+handler.command = /^set$/i;
+handler.group = true;
+handler.admin = true;
 
 // Handler para mostrar la configuración guardada
 async function viewHandler(m, { conn, command, args }) {
@@ -97,10 +96,9 @@ async function unsetHandler(m, { conn, args }) {
   delete configsOfType[name];
   return m.reply(`╰⊱💚⊱ *ÉXITO* ⊱💚⊱╮\n\n*Configuración de ${type.toUpperCase()} (${name}) eliminada correctamente.*`);
 }
-unsetHandler.command = /^unset$/i;
-unsetHandler.group = true;
-unsetHandler.admin = true;
-unsetHandler.botAdmin = true;
+handler.command = /^unset$/i;
+handler.group = true;
+handler.admin = true;
 
 // Comandos personalizados que usan viewHandler
 const customCommands = ['pagos', 'stock', 'combos', 'reglas', 'ofertas'];
