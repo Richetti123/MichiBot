@@ -1,6 +1,5 @@
-// Nuevo handler para visualizar cualquier configuración con un comando personalizado (ej: .pagos jair, .stock general, etc.)
-
-let setHandler = async (m, { conn, args, command }) => {
+// Handler para configurar texto o imagen
+export async function setHandler(m, { conn, args, command }) {
   if (args.length < 2 && !m.quoted) {
     throw `╰⊱❗️⊱ *USO INCORRECTO* ⊱❗️⊱╮\n\n*Escribe lo que quieras configurar*\n*Ejemplo:\n.set pagos jair\n.set combos general`;
   }
@@ -33,9 +32,10 @@ let setHandler = async (m, { conn, args, command }) => {
   }
 
   throw `╰⊱❗️⊱ *USO INCORRECTO* ⊱❗️⊱╮\n\n *Envía un texto o responde a una imagen para configurar ${type.toUpperCase()} con el nombre "${name}".*`;
-};
+}
 
-let viewHandler = async (m, { conn, command, args }) => {
+// Handler para mostrar la configuración guardada
+export async function viewHandler(m, { conn, command, args }) {
   let configType = command.toLowerCase();
   let configName = args[0]?.toLowerCase();
 
@@ -70,9 +70,10 @@ let viewHandler = async (m, { conn, command, args }) => {
   if (entry.type === 'text') {
     return m.reply(entry.content);
   }
-};
+}
 
-let unsetHandler = async (m, { conn, args }) => {
+// Handler para eliminar configuración
+export async function unsetHandler(m, { conn, args }) {
   if (args.length < 2) {
     throw `╰⊱⚠️⊱ *USO INCORRECTO* ⊱⚠️⊱╮\n\n*Ejemplo:*\n.unset pagos jair\n.unset stock general`;
   }
@@ -91,29 +92,16 @@ let unsetHandler = async (m, { conn, args }) => {
 
   delete configsOfType[name];
   return m.reply(`╰⊱💚⊱ *ÉXITO* ⊱💚⊱╮\n\n*Configuración de ${type.toUpperCase()} (${name}) eliminada correctamente.*`);
-};
-
-setHandler.command = /^set$/i;
-setHandler.group = true;
-setHandler.admin = true;
-setHandler.botAdmin = true;
-
-unsetHandler.command = /^unset$/i;
-unsetHandler.group = true;
-unsetHandler.admin = true;
-unsetHandler.botAdmin = true;
-
-const customCommands = ['pagos', 'stock', 'combos', 'reglas', 'ofertas'];
-for (let name of customCommands) {
-  let h = Object.assign({}, viewHandler);
-  h.command = new RegExp(`^${name}$`, 'i');
-  h.help = [`${name} <nombre>`];
-  h.tags = ['tools'];
-  h.group = true;
-  module.exports[`${name}Handler`] = h;
 }
 
-module.exports.setHandler = setHandler;
-module.exports.unsetHandler = unsetHandler;
+// Comandos personalizados que usan viewHandler
+const customCommands = ['pagos', 'stock', 'combos', 'reglas', 'ofertas'];
 
-export default setHandler;
+// Exportar handlers personalizados
+export const handlers = {};
+
+for (let name of customCommands) {
+  handlers[`${name}Handler`] = async (m, opts) => {
+    return viewHandler(m, { ...opts, command: name });
+  };
+}
