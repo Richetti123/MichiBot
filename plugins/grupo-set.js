@@ -18,20 +18,20 @@ let handler = async (m, { conn, args, text, command }) => {
 
   if (mime.startsWith('image')) {
     let buffer = await q.download()
-    if (!buffer) throw '❌ No se pudo descargar la imagen.'
+    if (!buffer) throw '╰⊱❌⊱ *ERROR* ⊱❌⊱╮\n\n❌ No se pudo descargar la imagen.'
 
     let base64 = buffer.toString('base64')
     chat.configs[type][name] = { type: 'image', content: base64 }
 
-    return conn.reply(m.chat, `✅ *Imagen de ${type.toUpperCase()} (${name}) configurada correctamente.*`, m)
+    return conn.reply(m.chat, `╰⊱💚⊱ *ÉXITO* ⊱💚⊱╮\n\n✅ *Imagen de ${type.toUpperCase()} (${name}) configurada correctamente.*`, m)
   }
 
   if (value) {
     chat.configs[type][name] = { type: 'text', content: value }
-    return conn.reply(m.chat, `✅ *Texto de ${type.toUpperCase()} (${name}) configurado correctamente.*`, m)
+    return conn.reply(m.chat, `╰⊱💚⊱ *ÉXITO* ⊱💚⊱╮\n\n✅ *Texto de ${type.toUpperCase()} (${name}) configurado correctamente.*`, m)
   }
 
-  throw `❌ Envía un texto o responde a una imagen para configurar ${type.toUpperCase()} con el nombre "${name}".`
+  throw `⊱❗️⊱ *ACCIÓN MAL USADA* ⊱❗️⊱╮\n\n❌ Envía un texto o responde a una imagen para configurar ${type.toUpperCase()} con el nombre "${name}".`
 }
 
 handler.command = /^set$/i
