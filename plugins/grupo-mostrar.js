@@ -34,7 +34,7 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
   }
 }
 
-handler.command = /^[a-z0-9_-]+$/i
+handler.command = /^(pagos|stock|reglas|combos|ofertas)$/i
 handler.group = true
 
 export default handler
