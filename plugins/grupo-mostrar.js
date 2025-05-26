@@ -23,7 +23,7 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
         m.chat,
         buffer,
         `${type}-${name}.jpg`,
-        `📌 *${type.toUpperCase()} - ${name}*`,
+        `AQUI TIENES LOS *${type.toUpperCase()} DE ${name}*`,
         m
       )
     } catch {
