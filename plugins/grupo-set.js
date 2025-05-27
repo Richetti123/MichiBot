@@ -1,10 +1,11 @@
-let handler = async (m, { conn, usedPrefix, command, args }) => {
+let handler = async (m, { conn, command, args }) => {
   let chat = global.db.data.chats[m.chat] ||= {}
   chat.configs ||= {}
 
   if (command === 'set') {
+    // Comando para configurar
     if (args.length < 2) {
-      throw `╰⊱❗️⊱ *USO INCORRECTO* ⊱❗️⊱╮\n\nEjemplo:\n.set pagos jair\n.set combos general`
+      throw `╰⊱❗️⊱ *USO INCORRECTO* ⊱❗️⊱╮\n\nEjemplo:\n.set pagos general\n.set combos oferta`
     }
 
     const [typeRaw, nameRaw, ...rest] = args
@@ -34,24 +35,26 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
     throw `⊱❗️⊱ *ACCIÓN MAL USADA* ⊱❗️⊱╮\n\n❌ Envía un texto o responde a una imagen para configurar ${type.toUpperCase()} con el nombre "${name}".`
   }
 
-  // Mostrar configuración existente
-  const type = command.toLowerCase()
-  const nameRaw = args[0]
-  const name = nameRaw ? nameRaw.toLowerCase() : null
+  // Si no es .set, intentamos responder con configuraciones guardadas
+  let text = m.text?.trim().toLowerCase()
+  if (!text) return
+
+  // Dividir en palabras para extraer tipo y nombre
+  let [type, name, ...rest] = text.split(' ')
+  if (!type) return
 
   let configsOfType = chat.configs[type]
-  if (!configsOfType) return
+  if (!configsOfType) return // No hay configuraciones para ese tipo
 
   if (!name) {
+    // Si sólo dice ".pagos" sin nombre, lista configuraciones disponibles
     let keys = Object.keys(configsOfType)
-    if (!keys.length) return m.reply(`╰⊱📭⊱ *VACÍO* ⊱📭⊱╮\n\nNo hay configuraciones para *${type.toUpperCase()}*.`)
-    return m.reply(`╰⊱📌⊱ *DISPONIBLES* ⊱📌⊱╮\n\nConfiguraciones para *${type.toUpperCase()}*:\n${keys.map(k => `◦ ${k}`).join('\n')}`)
+    if (!keys.length) return conn.reply(m.chat, `╰⊱📭⊱ *VACÍO* ⊱📭⊱╮\n\nNo hay configuraciones para *${type.toUpperCase()}*.`)
+    return conn.reply(m.chat, `╰⊱📌⊱ *DISPONIBLES* ⊱📌⊱╮\n\nConfiguraciones para *${type.toUpperCase()}*:\n${keys.map(k => `◦ ${k}`).join('\n')}`, m)
   }
 
   let entry = configsOfType[name]
-  if (!entry || !entry.content) {
-    return m.reply(`╰⊱❌⊱ *NO CONFIGURADO* ⊱❌⊱╮\n\nNo se encontró configuración para *${type.toUpperCase()} (${name})*.`)
-  }
+  if (!entry || !entry.content) return // No configurado, no responder para no interferir
 
   if (entry.type === 'image') {
     try {
@@ -60,27 +63,18 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
         m.chat,
         buffer,
         `${type}-${name}.jpg`,
-        `AQUI TIENES LOS *${type.toUpperCase()} DE ${name}*`,
+        `📌 *${type.toUpperCase()} - ${name}*`,
         m
       )
     } catch {
-      return m.reply(`╰⊱❌⊱ *ERROR* ⊱❌⊱╮\n\nError al enviar la imagen configurada para *${type.toUpperCase()} (${name})*.`)
+      return conn.reply(m.chat, `╰⊱❌⊱ *ERROR* ⊱❌⊱╮\n\nError al enviar la imagen configurada para *${type.toUpperCase()} (${name})*.`)
     }
   } else if (entry.type === 'text') {
-    return m.reply(entry.content)
+    return conn.reply(m.chat, entry.content, m)
   }
 }
 
-// 👇 Aquí definimos correctamente handler.command como función dinámica
-handler.command = (command, m, { conn }) => {
-  if (command === 'set') return true
-
-  const chat = global.db.data.chats[m.chat]
-  if (!chat || !chat.configs) return false
-
-  return Object.keys(chat.configs).includes(command.toLowerCase())
-}
-
+handler.command = ['set', /^\w+$/i]  // .set para configurar, cualquier palabra para responder
 handler.group = true
 handler.admin = true
 
