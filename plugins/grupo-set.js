@@ -66,8 +66,7 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
 
     const typeRaw = args[0]
     if (!typeRaw) {
-      if (!allowedCommands.length) return m.reply('╰⊱📭⊱ *VACÍO* ⊱📭⊱╮\n\nNo hay configuraciones guardadas.')
-      return m.reply(`╰⊱📌⊱ *COMANDOS CONFIGURADOS* ⊱📌⊱╮\n\n${allowedCommands.map(c => `◦ ${c}`).join('\n')}`)
+      return m.reply(`╰⊱❗️⊱ *USO INCORRECTO* ⊱❗️⊱╮\n\nUsa:\n${usedPrefix}cfg <tipo> [nombre]\n\nEjemplo:\n${usedPrefix}cfg pagos\n${usedPrefix}cfg pagos general`)
     }
 
     const type = typeRaw.toLowerCase()
