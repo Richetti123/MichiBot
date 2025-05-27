@@ -34,7 +34,7 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
     throw `⊱❗️⊱ *ACCIÓN MAL USADA* ⊱❗️⊱╮\n\n❌ Envía un texto o responde a una imagen para configurar ${type.toUpperCase()} con el nombre "${name}".`
   }
 
-  // Dinámico: obtener configuraciones ya creadas
+  // Mostrar configuración
   const type = command.toLowerCase()
   const nameRaw = args[0]
   const name = nameRaw ? nameRaw.toLowerCase() : null
@@ -43,7 +43,6 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
   if (!configsOfType) return // No responder si el tipo no existe
 
   if (!name) {
-    // Si solo se usa ".pagos", mostrar claves disponibles
     let keys = Object.keys(configsOfType)
     if (!keys.length) return m.reply(`╰⊱📭⊱ *VACÍO* ⊱📭⊱╮\n\nNo hay configuraciones para *${type.toUpperCase()}*.`)
     return m.reply(`╰⊱📌⊱ *DISPONIBLES* ⊱📌⊱╮\n\nConfiguraciones para *${type.toUpperCase()}*:\n${keys.map(k => `◦ ${k}`).join('\n')}`)
@@ -61,7 +60,7 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
         m.chat,
         buffer,
         `${type}-${name}.jpg`,
-        `📌 *${type.toUpperCase()} - ${name}*`,
+        `AQUI TIENES LOS *${type.toUpperCase()} DE ${name}*`,
         m
       )
     } catch {
@@ -72,9 +71,18 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
   }
 }
 
-handler.command = ['set', /^\w+$/i]  // 'set' para configurar, palabras para mostrar
+// FUNCIONALIDAD DINÁMICA:
+// Solo ejecuta si es 'set' o un comando que coincide con algún tipo configurado
+handler.command = async (command, m, { conn }) => {
+  if (command === 'set') return true
+
+  const chat = global.db.data.chats[m.chat] || {}
+  const configs = chat.configs || {}
+
+  return Object.keys(configs).includes(command.toLowerCase())
+}
+
 handler.group = true
 handler.admin = true
-handler.botAdmin = true
 
 export default handler
