@@ -34,13 +34,13 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
     throw `⊱❗️⊱ *ACCIÓN MAL USADA* ⊱❗️⊱╮\n\n❌ Envía un texto o responde a una imagen para configurar ${type.toUpperCase()} con el nombre "${name}".`
   }
 
-  // Mostrar configuración
+  // Mostrar configuración existente
   const type = command.toLowerCase()
   const nameRaw = args[0]
   const name = nameRaw ? nameRaw.toLowerCase() : null
 
   let configsOfType = chat.configs[type]
-  if (!configsOfType) return // No responder si el tipo no existe
+  if (!configsOfType) return
 
   if (!name) {
     let keys = Object.keys(configsOfType)
@@ -71,15 +71,14 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
   }
 }
 
-// FUNCIONALIDAD DINÁMICA:
-// Solo ejecuta si es 'set' o un comando que coincide con algún tipo configurado
-handler.command = async (command, m, { conn }) => {
+// 👇 Aquí definimos correctamente handler.command como función dinámica
+handler.command = (command, m, { conn }) => {
   if (command === 'set') return true
 
-  const chat = global.db.data.chats[m.chat] || {}
-  const configs = chat.configs || {}
+  const chat = global.db.data.chats[m.chat]
+  if (!chat || !chat.configs) return false
 
-  return Object.keys(configs).includes(command.toLowerCase())
+  return Object.keys(chat.configs).includes(command.toLowerCase())
 }
 
 handler.group = true
