@@ -109,7 +109,7 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
   }
 }
 
-handler.command = ['set', 'cfg']
+handler.command = ['set', 'ver']
 handler.group = true
 handler.admin = true
 
