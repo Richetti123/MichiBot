@@ -61,12 +61,31 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
     throw `⊱❗️⊱ *ACCIÓN MAL USADA* ⊱❗️⊱╮\n\n❌ Envía un texto o responde a una imagen para configurar ${type.toUpperCase()} con el nombre "${name}".`
   }
 
-  if (command === 'cfg') {
+  if (command === 'list') {
+    const configs = chat.configs
+    let output = '╰⊱📌⊱ *CONFIGURACIONES EN ESTE GRUPO* ⊱📌⊱╮\n\n'
+
+    let found = false
+    for (const type in configs) {
+      for (const name in configs[type]) {
+        output += `.${type} ${name}\n`
+        found = true
+      }
+    }
+
+    if (!found) {
+      output = '╰⊱📭⊱ *VACÍO* ⊱📭⊱╮\n\nNo hay configuraciones en este grupo.'
+    }
+
+    return m.reply(output)
+  }
+
+  if (command === 'm') {
     const allowedCommands = await readConfigTypes()
 
     const typeRaw = args[0]
     if (!typeRaw) {
-      return m.reply(`╰⊱❗️⊱ *USO INCORRECTO* ⊱❗️⊱╮\n\nUsa:\n${usedPrefix}cfg <tipo> [nombre]\n\nEjemplo:\n${usedPrefix}cfg pagos\n${usedPrefix}cfg pagos general`)
+      return m.reply(`╰⊱❗️⊱ *USO INCORRECTO* ⊱❗️⊱╮\n\nUsa:\n${usedPrefix}v <tipo> [nombre]\n\nEjemplo:\n${usedPrefix}v pagos\n${usedPrefix}v pagos general`)
     }
 
     const type = typeRaw.toLowerCase()
@@ -79,7 +98,6 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
     const name = nameRaw ? nameRaw.toLowerCase() : null
 
     if (!name) {
-      // Mostrar claves disponibles para ese tipo
       let keys = Object.keys(configsOfType)
       if (!keys.length) return m.reply(`╰⊱📭⊱ *VACÍO* ⊱📭⊱╮\n\nNo hay configuraciones para *${type.toUpperCase()}*.`)
       return m.reply(`╰⊱📌⊱ *DISPONIBLES* ⊱📌⊱╮\n\nConfiguraciones para *${type.toUpperCase()}*:\n${keys.map(k => `◦ ${k}`).join('\n')}`)
@@ -109,7 +127,12 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
   }
 }
 
-handler.command = ['set', 'm']
+handler.command = [
+  /^setcfg$/i, /^setconfig$/i,
+  /^listcfg$/i, /^listconfig$/i,
+  /^vercfg$/i, /^verconfig$/i
+]
+
 handler.group = true
 handler.admin = true
 
