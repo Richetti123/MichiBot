@@ -24,9 +24,10 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
   let chat = global.db.data.chats[m.chat] ||= {}
   chat.configs ||= {}
 
-  if (command === 'set') {
+  // Configurar
+  if (command.match(/^setcfg|setconfig$/i)) {
     if (args.length < 2) {
-      throw `╰⊱❗️⊱ *USO INCORRECTO* ⊱❗️⊱╮\n\nEjemplo:\n.set pagos jair\n.set combos general`
+      throw `╰⊱❗️⊱ *USO INCORRECTO* ⊱❗️⊱╮\n\nEjemplo:\n${usedPrefix}${command} pagos jair\n${usedPrefix}${command} combos general`
     }
 
     const [typeRaw, nameRaw, ...rest] = args
@@ -61,35 +62,17 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
     throw `⊱❗️⊱ *ACCIÓN MAL USADA* ⊱❗️⊱╮\n\n❌ Envía un texto o responde a una imagen para configurar ${type.toUpperCase()} con el nombre "${name}".`
   }
 
-  if (command === 'list') {
-    const configs = chat.configs
-    let output = '╰⊱📌⊱ *CONFIGURACIONES EN ESTE GRUPO* ⊱📌⊱╮\n\n'
-
-    let found = false
-    for (const type in configs) {
-      for (const name in configs[type]) {
-        output += `.${type} ${name}\n`
-        found = true
-      }
-    }
-
-    if (!found) {
-      output = '╰⊱📭⊱ *VACÍO* ⊱📭⊱╮\n\nNo hay configuraciones en este grupo.'
-    }
-
-    return m.reply(output)
-  }
-
-  if (command === 'm') {
+  // Ver configuraciones de un tipo
+  if (command.match(/^vercfg|verconfig$/i)) {
     const allowedCommands = await readConfigTypes()
 
     const typeRaw = args[0]
     if (!typeRaw) {
-      return m.reply(`╰⊱❗️⊱ *USO INCORRECTO* ⊱❗️⊱╮\n\nUsa:\n${usedPrefix}v <tipo> [nombre]\n\nEjemplo:\n${usedPrefix}v pagos\n${usedPrefix}v pagos general`)
+      return m.reply(`╰⊱❗️⊱ *USO INCORRECTO* ⊱❗️⊱╮\n\nUsa:\n${usedPrefix}${command} <tipo> [nombre]\n\nEjemplo:\n${usedPrefix}${command} pagos\n${usedPrefix}${command} pagos general`)
     }
 
     const type = typeRaw.toLowerCase()
-    if (!allowedCommands.includes(type)) return m.reply(`╰⊱❌⊱ *NO CONFIGURADO* ⊱❌⊱╮\n\nEl comando "${type}" no está configurado.`)
+    if (!allowedCommands.includes(type)) return m.reply(`╰⊱❌⊱ *NO CONFIGURADO* ⊱❌⊱╮\n\nEl apartado "${type}" no está configurado.`)
 
     let configsOfType = chat.configs[type]
     if (!configsOfType) return m.reply(`╰⊱📭⊱ *VACÍO* ⊱📭⊱╮\n\nNo hay configuraciones para *${type.toUpperCase()}*.`)
@@ -115,7 +98,7 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
           m.chat,
           buffer,
           `${type}-${name}.jpg`,
-          `AQUI TIENES LOS *${type.toUpperCase()} DE ${name}*`,
+          `AQUÍ TIENES LOS *${type.toUpperCase()} DE ${name}*`,
           m
         )
       } catch {
@@ -125,14 +108,33 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
       return m.reply(entry.content)
     }
   }
+
+  // Listar todo lo configurado
+ if (command.match(/^(listcfg|listconfig|listacfg|listaconfig)$/i)) {
+    const allConfigs = chat.configs
+    let response = '╰⊱📋⊱ *CONFIGURACIONES EN ESTE GRUPO* ⊱📋⊱╮\n\n'
+    let count = 0
+
+    for (let type in allConfigs) {
+      for (let name in allConfigs[type]) {
+        response += `.${type} ${name}\n`
+        count++
+      }
+    }
+
+    if (count === 0) {
+      return m.reply(`╰⊱📭⊱ *VACÍO* ⊱📭⊱╮\n\nNo hay configuraciones guardadas.`)
+    }
+
+    return m.reply(response)
+  }
 }
 
 handler.command = [
   /^setcfg$/i, /^setconfig$/i,
-  /^listcfg$/i, /^listconfig$/i,
+  /^listcfg$/i, /^listconfig$/i, /^listacfg$/i, /^listaconfig$/i,
   /^vercfg$/i, /^verconfig$/i
 ]
-
 handler.group = true
 handler.admin = true
 
