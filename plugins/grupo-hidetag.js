@@ -48,7 +48,7 @@ var handler = async (m, { conn, text, participants, isOwner, isAdmin }) => {
     } else {
       await conn.relayMessage(m.chat, {
         extendedTextMessage: {
-          text: `${masss}\n${htextos}\n`,
+          text: `${htextos}`,
           contextInfo: { mentionedJid: users }
         }
       }, {})
