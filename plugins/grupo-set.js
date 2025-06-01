@@ -1,12 +1,12 @@
 import fs from 'fs/promises'
 import path from 'path'
 
-const CONFIG_FILE = path.resolve('./src/configuraciones.txt')
+const CONFIG_FILE = path.resolve('./src/configuraciones.json')
 
 async function readConfigTypes() {
   try {
     const data = await fs.readFile(CONFIG_FILE, 'utf-8')
-    return data.split('\n').map(line => line.trim()).filter(Boolean)
+    return JSON.parse(data)
   } catch {
     return []
   }
@@ -16,7 +16,7 @@ async function addConfigType(type) {
   const types = await readConfigTypes()
   if (!types.includes(type)) {
     types.push(type)
-    await fs.writeFile(CONFIG_FILE, types.join('\n'), 'utf-8')
+    await fs.writeFile(CONFIG_FILE, JSON.stringify(types, null, 2), 'utf-8')
   }
 }
 
@@ -24,8 +24,8 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
   let chat = global.db.data.chats[m.chat] ||= {}
   chat.configs ||= {}
 
-  // Configurar
-  if (command.match(/^setcfg|setconfig$/i)) {
+  // Configurar: .setcfg, .setconfig, .s, .set
+  if (command.match(/^(setcfg|setconfig|s|set)$/i)) {
     if (args.length < 2) {
       throw `╰⊱❗️⊱ *USO INCORRECTO* ⊱❗️⊱╮\n\nEjemplo:\n${usedPrefix}${command} pagos jair\n${usedPrefix}${command} combos general`
     }
@@ -62,8 +62,8 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
     throw `⊱❗️⊱ *ACCIÓN MAL USADA* ⊱❗️⊱╮\n\n❌ Envía un texto o responde a una imagen para configurar ${type.toUpperCase()} con el nombre "${name}".`
   }
 
-  // Ver configuraciones de un tipo
-  if (command.match(/^vercfg|verconfig$/i)) {
+  // Ver configuraciones: .vercfg, .verconfig, .v
+  if (command.match(/^(vercfg|verconfig|v)$/i)) {
     const allowedCommands = await readConfigTypes()
 
     const typeRaw = args[0]
@@ -109,8 +109,8 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
     }
   }
 
-  // Listar todo lo configurado
- if (command.match(/^(listcfg|listconfig|listacfg|listaconfig)$/i)) {
+  // Listar todo lo configurado: .listcfg, .listconfig, .listacfg, .listaconfig
+  if (command.match(/^(listcfg|listconfig|listacfg|listaconfig)$/i)) {
     const allConfigs = chat.configs
     let response = '╰⊱📋⊱ *CONFIGURACIONES EN ESTE GRUPO* ⊱📋⊱╮\n\n'
     let count = 0
@@ -131,9 +131,9 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
 }
 
 handler.command = [
-  /^setcfg$/i, /^setconfig$/i,
+  /^setcfg$/i, /^setconfig$/i, /^s$/i, /^set$/i,
   /^listcfg$/i, /^listconfig$/i, /^listacfg$/i, /^listaconfig$/i,
-  /^vercfg$/i, /^verconfig$/i
+  /^vercfg$/i, /^verconfig$/i, /^v$/i
 ]
 handler.group = true
 handler.admin = true
