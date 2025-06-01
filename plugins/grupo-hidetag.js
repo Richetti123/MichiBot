@@ -1,6 +1,9 @@
 import { generateWAMessageFromContent } from '@whiskeysockets/baileys'
 import * as fs from 'fs'
 
+const gatamenu = 'https://qu.ax/ZJKqt.jpg'
+const md = 'https://www.instagram.com/richetti_123'
+
 var handler = async (m, { conn, text, participants, isOwner, isAdmin }) => {
 
 if (!m.quoted && !text) return conn.reply(m.chat, `${lenguajeGB['smsAvisoMG']()} 𝙔 𝙀𝙇 𝙏𝙀𝙓𝙏𝙊?`, m)
