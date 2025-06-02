@@ -117,7 +117,7 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
 
     for (let type in allConfigs) {
       for (let name in allConfigs[type]) {
-        response += `.${type} ${name}\n`
+        response += `.vercfg ${type} ${name}\n`
         count++
       }
     }
