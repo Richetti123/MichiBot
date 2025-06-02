@@ -1,63 +1,58 @@
 import { generateWAMessageFromContent } from '@whiskeysockets/baileys'
 import * as fs from 'fs'
 
-var handler = async (m, { conn, text, participants, isOwner, isAdmin }) => {
-
-  if (!m.quoted && !text) return conn.reply(m.chat, `${lenguajeGB['smsAvisoMG']()} 𝙔 𝙀𝙇 𝙏𝙀𝙓𝙏𝙊?`, m)
+var handler = async (m, { conn, text, participants }) => {
+  if (!m.quoted && !text) 
+    return conn.reply(m.chat, `${lenguajeGB['smsAvisoMG']()} 𝙔 𝙀𝙇 𝙏𝙀𝙓𝙏𝙊?`, m)
 
   try { 
-
     let users = participants.map(u => conn.decodeJid(u.id))
-    let q = m.quoted ? m.quoted : m || m.text || m.sender
-    let c = m.quoted ? await m.getQuotedObj() : m.msg || m.text || m.sender
-    let msg = conn.cMod(
-      m.chat, 
-      generateWAMessageFromContent(
-        m.chat, 
-        { [m.quoted ? q.mtype : 'extendedTextMessage']: m.quoted ? c.message[q.mtype] : { text: '' || c }}, 
-        { quoted: null, userJid: conn.user.id }
-      ), 
-      text || q.text, 
-      conn.user.jid, 
-      { mentions: users }
-    )
-    await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
-
-  } catch {  
-
-    let users = participants.map(u => conn.decodeJid(u.id))
-    let quoted = m.quoted ? m.quoted : m
-    let mime = (quoted.msg || quoted).mimetype || ''
+    let quoted = m.quoted
+    let mime = (quoted?.msg || quoted)?.mimetype || ''
     let isMedia = /image|video|sticker|audio/.test(mime)
-    let more = String.fromCharCode(8206)
-    let masss = more.repeat(850)
-    let htextos = `${text ? text : "MichiBot"}`
 
-    if ((isMedia && quoted.mtype === 'imageMessage') && htextos) {
-      var mediax = await quoted.download?.()
-      conn.sendMessage(m.chat, { image: mediax, mentions: users, caption: htextos, mentions: users }, { quoted: null })
-    } else if ((isMedia && quoted.mtype === 'videoMessage') && htextos) {
-      var mediax = await quoted.download?.()
-      conn.sendMessage(m.chat, { video: mediax, mentions: users, mimetype: 'video/mp4', caption: htextos }, { quoted: null })
-    } else if ((isMedia && quoted.mtype === 'audioMessage') && htextos) {
-      var mediax = await quoted.download?.()
-      conn.sendMessage(m.chat, { audio: mediax, mentions: users, mimetype: 'audio/mp4', fileName: `Hidetag.mp3` }, { quoted: null })
-    } else if ((isMedia && quoted.mtype === 'stickerMessage') && htextos) {
-      var mediax = await quoted.download?.()
-      conn.sendMessage(m.chat, { sticker: mediax, mentions: users }, { quoted: null })
+    if (quoted) {
+      if (isMedia) {
+        // Descarga el media citado
+        let buffer = await quoted.download?.()
+        if (!buffer) return conn.reply(m.chat, 'No se pudo descargar el contenido citado.', m)
+        // Envía el media con menciones y texto (si hay)
+        await conn.sendMessage(
+          m.chat,
+          { 
+            [quoted.mtype.replace('Message', '')]: buffer,
+            mentions: users,
+            caption: text || ''
+          },
+          { quoted: null }
+        )
+      } else {
+        // Texto: si hay texto nuevo, lo manda, si no, reenvía texto citado
+        let originalText = quoted.text || (quoted.msg && quoted.msg.text) || ''
+        let messageText = text || originalText || ''
+        await conn.sendMessage(
+          m.chat,
+          { text: messageText, mentions: users },
+          { quoted: null }
+        )
+      }
     } else {
-      await conn.relayMessage(m.chat, {
-        extendedTextMessage: {
-          text: `${htextos}`,
-          contextInfo: { mentionedJid: users }
-        }
-      }, {})
+      // No hay mensaje citado, enviar texto normal con menciones
+      await conn.sendMessage(
+        m.chat,
+        { text: text, mentions: users },
+        { quoted: null }
+      )
     }
-  }
 
+  } catch (e) {
+    console.error(e)
+    return conn.reply(m.chat, 'Ocurrió un error al intentar notificar el mensaje.', m)
+  }
 }
 
 handler.command = /^(hidetag|notificar|notify|viso|aviso)$/i
 handler.group = true
 handler.admin = true
+
 export default handler
