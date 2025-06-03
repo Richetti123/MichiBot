@@ -25,7 +25,7 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
   chat.configs ||= {}
 
   // Configurar: .setcfg, .setconfig, .s, .set
-  if (command.match(/^(setcfg|setconfig|s|set)$/i)) {
+  if (command.match(/^(setcfg|setconfig|set)$/i)) {
     if (args.length < 2) {
       throw `╰⊱❗️⊱ *USO INCORRECTO* ⊱❗️⊱╮\n\nEjemplo:\n${usedPrefix}${command} pagos jair\n${usedPrefix}${command} combos general`
     }
@@ -130,10 +130,35 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
   }
 }
 
+// .delcfg (eliminar configuración)
+if (command.match(/^(delcfg|delconfig)$/i)) {
+  if (args.length < 2) {
+    throw `╰⊱❗️⊱ *USO INCORRECTO* ⊱❗️⊱╮\n\nUsa:\n${usedPrefix}${command} <tipo> <nombre>\n\nEjemplo:\n${usedPrefix}${command} pagos jair`
+  }
+
+  const [typeRaw, nameRaw] = args
+  const type = typeRaw.toLowerCase()
+  const name = nameRaw.toLowerCase()
+
+  if (!chat.configs[type] || !chat.configs[type][name]) {
+    return m.reply(`╰⊱❌⊱ *NO CONFIGURADO* ⊱❌⊱╮\n\nNo se encontró configuración para *${type.toUpperCase()} (${name})*.`)
+  }
+
+  delete chat.configs[type][name]
+
+  // Limpiar tipo vacío si no quedan nombres configurados
+  if (Object.keys(chat.configs[type]).length === 0) {
+    delete chat.configs[type]
+  }
+
+  return m.reply(`╰⊱🗑️⊱ *ELIMINADO* ⊱🗑️⊱╮\n\nLa configuración para *${type.toUpperCase()} de (${name})* se eliminó correctamente.`)
+}
+
 handler.command = [
-  /^setcfg$/i, /^setconfig$/i, /^s$/i, /^set$/i,
+  /^setcfg$/i, /^setconfig$/i, /^set$/i,
   /^listcfg$/i, /^listconfig$/i, /^listacfg$/i, /^listaconfig$/i,
-  /^vercfg$/i, /^verconfig$/i, /^v$/i
+  /^vercfg$/i, /^verconfig$/i, /^v$/i,
+  /^delcfg$/i, /^delconfig$/i
 ]
 handler.group = true
 handler.admin = true
