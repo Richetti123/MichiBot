@@ -1067,7 +1067,6 @@ fin: "23:59"
 }
 }
 if (typeof settings !== 'object') global.db.data.settings[this.user.jid] = {}
-if (typeof settings !== 'object') global.db.data.settings[detectwhatt] = {}
 if (settings) {
 if (!('self' in settings)) settings.self = false
 if (!('autoread' in settings)) settings.autoread = false
