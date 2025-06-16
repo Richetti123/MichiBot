@@ -67,7 +67,7 @@ m.reply(`${lenguajeGB['smsAvisoEG']()}${mid.smsGrup}`);
 break;
 
 case 'cerrar': case 'close': case 'cerrado':
-await conn.groupSettingUpdate(groupId, 'not_announcement');
+await conn.groupSettingUpdate(groupId, 'announcement');
 m.reply(`${lenguajeGB['smsAvisoEG']()}${mid.smsGrup2}`);
 break;
 
