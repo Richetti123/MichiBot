@@ -160,7 +160,7 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
 }
 
 handler.command = [
-  /^setcfg$/i, /^setconfig$/i, /^set$/i,
+  /^setcfg$/i, /^setconfig$/i, /^s$/i, /^set$/i,
   /^vercfg$/i, /^verconfig$/i, /^v$/i,
   /^delcfg$/i, /^delconfig$/i, /^deletecfg$/i, /^deleteconfig$/i,
   /^listcfg$/i, /^listconfig$/i, /^listacfg$/i, /^listaconfig$/i
