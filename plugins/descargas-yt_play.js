@@ -31,14 +31,17 @@ const texto1 = `⌘━─━─≪ *YOUTUBE* ≫─━─━⌘
 ★ ${mid.smsYT4}
 ★ ${yt_play[0].url.replace(/^https?:\/\//, '')}
 ⌘━━─≪ ${gt} ≫─━━⌘
+
+> Para descargar el audio reacciona con "🎶"
+> Para descargar el video reacciona con "📽"
 `.trim();
 
 tempStorage[m.sender] = { url: yt_play[0].url, title: yt_play[0].title };
 
 if (m.isWABusiness) {
-await conn.sendFile(m.chat, yt_play[0].thumbnail, 'error.jpg', texto1 + `\n> Para descargas en audio reacciona con "🎶"\n> Para descargar en video reacciona con "📽"`, m, null, fake);
+await conn.sendFile(m.chat, yt_play[0].thumbnail, 'error.jpg', texto1 + `\n> Para descargar el audio reacciona con "🎶"\n> Para descargar el video reacciona con "📽"`, m, null, fake);
 } else {
-await conn.sendMessage(m.chat, { image: { url: yt_play[0].thumbnail }, caption: gt, footer: texto1,buttons: [{ buttonId: `.ytmp3 ${yt_play[0].url}`, buttonText: { displayText: "𓃠 𝗔 𝗨 𝗗 𝗜 𝗢" }, type: 1 }, { buttonId: `.ytmp4 ${yt_play[0].url}`, buttonText: { displayText: "𓃠 𝗩 𝗜 𝗗 𝗘 𝗢" }, type: 1 }], viewOnce: true, headerType: 4 }, { quoted: m });
+await conn.sendMessage(m.chat, { image: { url: yt_play[0].thumbnail }, caption: gt, footer: texto1,buttons: [{ buttonId: `.ytmp3 ${yt_play[0].url}`, buttonText: { displayText: "Audio" }, type: 1 }, { buttonId: `.ytmp4 ${yt_play[0].url}`, buttonText: { displayText: "Video" }, type: 1 }], viewOnce: true, headerType: 4 }, { quoted: m });
 }};
 
 handler.before = async (m, { conn }) => {
