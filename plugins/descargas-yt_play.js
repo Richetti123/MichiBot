@@ -9,7 +9,7 @@ const LimitVid = 425 * 1024 * 1024; // 425MB
 let tempStorage = {};
 
 const handler = async (m, { conn, command, args, text, usedPrefix }) => {
-if (!text) return conn.reply(m.chat, `${lenguajeGB['smsAvisoMG']()}${mid.smsMalused4}\n*${usedPrefix + command} Bad Bunny - TURiSTA*`, m);
+if (!text) return conn.reply(m.chat, `${lenguajeGB['smsAvisoMG']()}${mid.smsMalused4}\n*${usedPrefix + command} Billie Eilish - Bellyache*`, m);
 const yt_play = await search(args.join(' '));
 const ytplay2 = await yts(text);
 const texto1 = `⌘━─━─≪ *YOUTUBE* ≫─━─━⌘
@@ -31,17 +31,15 @@ const texto1 = `⌘━─━─≪ *YOUTUBE* ≫─━─━⌘
 ★ ${mid.smsYT4}
 ★ ${yt_play[0].url.replace(/^https?:\/\//, '')}
 ⌘━━─≪ ${gt} ≫─━━⌘
-
-> Para descargar el audio reacciona con "🎶"
-> Para descargar el video reacciona con "📽"
+\n> Para descargas en audio reacciona con "🎶"\n> Para descargar en video reacciona con "📽"
 `.trim();
 
 tempStorage[m.sender] = { url: yt_play[0].url, title: yt_play[0].title };
 
 if (m.isWABusiness) {
-await conn.sendFile(m.chat, yt_play[0].thumbnail, 'error.jpg', texto1 + `\n> Para descargar el audio reacciona con "🎶"\n> Para descargar el video reacciona con "📽"`, m, null, fake);
+await conn.sendFile(m.chat, yt_play[0].thumbnail, 'error.jpg', texto1 + `\n> Para descargas en audio reacciona con "🎶"\n> Para descargar en video reacciona con "📽"`, m, null, fake);
 } else {
-await conn.sendMessage(m.chat, { image: { url: yt_play[0].thumbnail }, caption: gt, footer: texto1,buttons: [{ buttonId: `.ytmp3 ${yt_play[0].url}`, buttonText: { displayText: "Audio" }, type: 1 }, { buttonId: `.ytmp4 ${yt_play[0].url}`, buttonText: { displayText: "Video" }, type: 1 }], viewOnce: true, headerType: 4 }, { quoted: m });
+await conn.sendMessage(m.chat, { image: { url: yt_play[0].thumbnail }, caption: gt, footer: texto1,buttons: [{ buttonId: `.ytmp3 ${yt_play[0].url}`, buttonText: { displayText: "AUDIO" }, type: 1 }, { buttonId: `.ytmp4 ${yt_play[0].url}`, buttonText: { displayText: "VIDEO" }, type: 1 }], viewOnce: true, headerType: 4 }, { quoted: m });
 }};
 
 handler.before = async (m, { conn }) => {
@@ -59,7 +57,7 @@ const audioApis = [
 { url: () => ogmp3.download(userVideoData.url, selectedQuality, 'audio'), extract: (data) => ({ data: data.result.download, isDirect: false }) },
 { url: () => ytmp3(userVideoData.url), extract: (data) => ({ data, isDirect: true }) },
 { url: () => fetch(`https://api.neoxr.eu/api/youtube?url=${userVideoData.url}&type=audio&quality=128kbps&apikey=GataDios`).then(res => res.json()), extract: (data) => ({ data: data.data.url, isDirect: false }) },
-{ url: () => fetch(`${global.APIs.fgmods.url}/downloader/ytmp4?url=${userVideoData.url}&apikey=${global.APIs.fgmods.key}`).then(res => res.json()), extract: (data) => ({ data: data.result.dl_url, isDirect: false }) },
+{ url: () => fetch(`${global.APIs.stellar.url}/dow/ytmp3?url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data?.data?.dl, isDirect: false }) },
 { url: () => fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data.dl, isDirect: false }) },
 { url: () => fetch(`${apis}/download/ytmp3?url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data.status ? data.data.download.url : null, isDirect: false }) },
 { url: () => fetch(`https://api.zenkey.my.id/api/download/ytmp3?apikey=zenkey&url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data.result.download.url, isDirect: false }) }
@@ -70,7 +68,7 @@ const videoApis = [
 { url: () => ytmp4(userVideoData.url), extract: (data) => ({ data, isDirect: false }) },
 { url: () => fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data.dl, isDirect: false }) },
 { url: () => fetch(`https://api.neoxr.eu/api/youtube?url=${userVideoData.url}&type=video&quality=720p&apikey=GataDios`).then(res => res.json()), extract: (data) => ({ data: data.data.url, isDirect: false }) },
-{ url: () => fetch(`${global.APIs.fgmods.url}/downloader/ytmp4?url=${userVideoData.url}&apikey=${global.APIs.fgmods.key}`).then(res => res.json()), extract: (data) => ({ data: data.result.dl_url, isDirect: false }) },
+{ url: () => fetch(`${global.APIs.stellar.url}/dow/ytmp4?url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data?.data?.dl, isDirect: false }) },
 { url: () => fetch(`${apis}/download/ytmp4?url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data.status ? data.data.download.url : null, isDirect: false }) },
 { url: () => fetch(`https://exonity.tech/api/ytdlp2-faster?apikey=adminsepuh&url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data.result.media.mp4, isDirect: false }) }
 ];
