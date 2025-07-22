@@ -53,7 +53,7 @@ const handler = async (m, { conn }) => {
 };
 
 handler.command = /^registrarpago$/i;
-handler.help = ['registrarpago Nombre; número; día; monto; bandera'];
+handler.help = ['registrarpago'];
 handler.tags = ['pagos'];
 handler.exp = 0;
 
