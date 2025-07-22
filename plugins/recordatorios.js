@@ -11,11 +11,20 @@ const pagosFile = path.join(__dirname, 'src', 'pagos.json');
 
 function cargarPagos() {
   if (!fs.existsSync(pagosFile)) return {};
-  return JSON.parse(fs.readFileSync(pagosFile, 'utf8'));
+  try {
+    return JSON.parse(fs.readFileSync(pagosFile, 'utf8'));
+  } catch (e) {
+    console.error('Error leyendo pagos.json:', e);
+    return {};
+  }
 }
 
 function guardarPagos(pagos) {
-  fs.writeFileSync(pagosFile, JSON.stringify(pagos, null, 2));
+  try {
+    fs.writeFileSync(pagosFile, JSON.stringify(pagos, null, 2));
+  } catch (e) {
+    console.error('Error escribiendo pagos.json:', e);
+  }
 }
 
 async function enviarMensaje(client, numero, mensaje) {
@@ -31,11 +40,13 @@ async function verificarPagos(client) {
   const hoy = new Date().getDate();
   const manana = (new Date(Date.now() + 86400000)).getDate();
 
+  // Filtrar pagos para hoy o mañana
   const deudoresHoyManana = Object.entries(pagos)
     .filter(([_, pago]) => pago.diaPago === hoy || pago.diaPago === manana);
 
   if (deudoresHoyManana.length === 0) return;
 
+  // Crear mensajes para owner
   const listaPorDia = { [hoy]: [], [manana]: [] };
   deudoresHoyManana.forEach(([_, pago]) => {
     if (pago.diaPago === hoy) listaPorDia[hoy].push(pago);
@@ -59,64 +70,54 @@ async function verificarPagos(client) {
 
   await enviarMensaje(client, OWNER_NUMBER, mensajeOwner);
 
+  // Enviar recordatorios a usuarios con pago hoy, con delay entre cada uno
   const deudoresHoy = deudoresHoyManana.filter(([_, pago]) => pago.diaPago === hoy);
 
   for (let i = 0; i < deudoresHoy.length; i++) {
     const [numero, pago] = deudoresHoy[i];
     const mensajeUsuario = `💸 *Recordatorio de pago*\nHola *${pago.nombre}*, recordá que el *${pago.diaPago}* de cada mes tenés que abonar *${pago.monto} ${pago.bandera}*.\n¡Por favor, realizá tu pago a tiempo!`;
 
-    if (i > 0) await delay(30 * 60 * 1000); // 30 minutos
+    if (i > 0) await delay(30 * 60 * 1000); // Espera 30 minutos antes de enviar al siguiente
 
     await enviarMensaje(client, numero, mensajeUsuario);
   }
 }
 
-async function comandoRegistrarPago(mensaje, client) {
-  const texto = mensaje.body || '';
-  const args = texto.split(' ').slice(1).join(' ').split(';').map(s => s.trim());
-
+// Handler para registrar pagos desde comando
+let handler = async (m, { client, text }) => {
+  const args = text.split(';').map(s => s.trim());
   if (args.length !== 5) {
-    await client.sendMessage(mensaje.from, '❌ Uso incorrecto. Ejemplo:\n.registrarpago Nombre; +569XXXXXXXX; día; monto; bandera');
-    return;
+    return client.sendMessage(m.from, '❌ Uso incorrecto. Ejemplo:\n.registrarpago Nombre; +569XXXXXXXX; día; monto; bandera');
   }
-
   const [nombre, numero, diaStr, monto, bandera] = args;
   const diaPago = parseInt(diaStr, 10);
-
   if (!nombre || !numero || isNaN(diaPago) || !monto || !bandera) {
-    await client.sendMessage(mensaje.from, '❌ Datos inválidos. Verifica que los campos estén correctos.');
-    return;
+    return client.sendMessage(m.from, '❌ Datos inválidos. Verifica que los campos estén correctos.');
   }
 
   const pagos = cargarPagos();
-
-  pagos[numero] = {
-    nombre,
-    diaPago,
-    monto,
-    bandera
-  };
-
+  pagos[numero] = { nombre, diaPago, monto, bandera };
   guardarPagos(pagos);
 
-  await client.sendMessage(mensaje.from, `✅ Pago registrado:\nNombre: ${nombre}\nNúmero: ${numero}\nDía: ${diaPago}\nMonto: ${monto} ${bandera}`);
+  await client.sendMessage(m.from, `✅ Pago registrado:\nNombre: ${nombre}\nNúmero: ${numero}\nDía: ${diaPago}\nMonto: ${monto} ${bandera}`);
 
   await verificarPagos(client);
-}
+};
 
-// Función para iniciar el ciclo automático de recordatorios
+handler.help = ['registrarpago Nombre; número; día; monto; bandera'];
+handler.tags = ['pagos'];
+handler.command = /^registrarpago$/i;
+handler.exp = 0;
+
+export { handler };
+
+// Función para iniciar recordatorios automáticos cada 12 horas
 function iniciarRecordatorios(client) {
-  // Ejecutar al iniciar
   verificarPagos(client).catch(console.error);
 
-  // Ejecutar cada 24 horas
   setInterval(() => {
     verificarPagos(client).catch(console.error);
-  }, 24 * 60 * 60 * 1000);
+  }, 12 * 60 * 60 * 1000);
 }
 
-export {
-  comandoRegistrarPago,
-  verificarPagos,
-  iniciarRecordatorios,
-};
+export { iniciarRecordatorios };
