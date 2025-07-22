@@ -23,8 +23,8 @@ async function handler(mensaje, client) {
   await client.sendMessage(mensaje.from, `✅ Mensaje de recordatorio enviado a ${pago.nombre}.`);
 }
 
-handler.help = ['recordarPago'];
+handler.help = ['recordarpago'];
 handler.tags = ['pagos'];
-handler.command = /^recordarPago$/i;
+handler.command = /^recordarpago$/i;
 
 export default handler;
