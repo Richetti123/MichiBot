@@ -1,0 +1,176 @@
+{
+  "+521000000001": {
+    "nombre": "CDN",
+    "diaPago": 1,
+    "monto": "$180",
+    "bandera": "🇲🇽"
+  },
+  "+549111111111": {
+    "nombre": "Tiara",
+    "diaPago": 1,
+    "monto": "$3000",
+    "bandera": "🇦🇷"
+  },
+  "+549222222222": {
+    "nombre": "Luciano",
+    "diaPago": 1,
+    "monto": "$3000",
+    "bandera": "🇦🇷"
+  },
+  "+569333333333": {
+    "nombre": "Fanny",
+    "diaPago": 1,
+    "monto": "$3000",
+    "bandera": "🇨🇱"
+  },
+  "+549444444444": {
+    "nombre": "Trini",
+    "diaPago": 2,
+    "monto": "$3000",
+    "bandera": "🇨🇱"
+  },
+  "+521010101010": {
+    "nombre": "Natham",
+    "diaPago": 3,
+    "monto": "$8",
+    "bandera": "🇺🇸"
+  },
+  "+569555555555": {
+    "nombre": "Carolina",
+    "diaPago": 5,
+    "monto": "$3000",
+    "bandera": "🇨🇱"
+  },
+  "+519666666666": {
+    "nombre": "Abraham",
+    "diaPago": 8,
+    "monto": "S/10",
+    "bandera": "🇵🇪"
+  },
+  "+549777777777": {
+    "nombre": "Anahí",
+    "diaPago": 8,
+    "monto": "$3000",
+    "bandera": "🇦🇷"
+  },
+  "+569888888888": {
+    "nombre": "Alex",
+    "diaPago": 9,
+    "monto": "$3000",
+    "bandera": "🇨🇱"
+  },
+  "+549999999999": {
+    "nombre": "Leo C.",
+    "diaPago": 9,
+    "monto": "$3000",
+    "bandera": "🇦🇷"
+  },
+  "+569101010101": {
+    "nombre": "Tamy",
+    "diaPago": 14,
+    "monto": "$3000",
+    "bandera": "🇨🇱"
+  },
+  "+549121212121": {
+    "nombre": "Julz",
+    "diaPago": 14,
+    "monto": "$3000",
+    "bandera": "🇦🇷"
+  },
+  "+521131313131": {
+    "nombre": "LeoNet",
+    "diaPago": 14,
+    "monto": "$200",
+    "bandera": "🇲🇽🥈"
+  },
+  "+569161616161": {
+    "nombre": "Kathy",
+    "diaPago": 15,
+    "monto": "$10000",
+    "bandera": "🇨🇱"
+  },
+  "+549141414141": {
+    "nombre": "Richi",
+    "diaPago": 16,
+    "monto": "S/10",
+    "bandera": "🇵🇪"
+  },
+  "+549151515151": {
+    "nombre": "Mxlon",
+    "diaPago": 18,
+    "monto": "$8000",
+    "bandera": "🇦🇷"
+  },
+  "+549171717171": {
+    "nombre": "Sebastián",
+    "diaPago": 21,
+    "monto": "$1080",
+    "bandera": "🇲🇽🥇"
+  },
+  "+549242424242": {
+    "nombre": "Luchitx",
+    "diaPago": 21,
+    "monto": "$7000",
+    "bandera": "🇦🇷🥇"
+  },
+  "+569252525252": {
+    "nombre": "Dani",
+    "diaPago": 21,
+    "monto": "$8000",
+    "bandera": "🇨🇱"
+  },
+  "+549262626262": {
+    "nombre": "Thoru bot",
+    "diaPago": 21,
+    "monto": "$180",
+    "bandera": "🇲🇽"
+  },
+  "+549272727272": {
+    "nombre": "Milu",
+    "diaPago": 21,
+    "monto": "$8000",
+    "bandera": "🇦🇷"
+  },
+  "+549282828282": {
+    "nombre": "Maluco",
+    "diaPago": 21,
+    "monto": "$3000",
+    "bandera": "🇦🇷"
+  },
+  "+569292929292": {
+    "nombre": "Victoria",
+    "diaPago": 21,
+    "monto": "$3000",
+    "bandera": "🇨🇱"
+  },
+  "+549303030303": {
+    "nombre": "Nadya",
+    "diaPago": 21,
+    "monto": "$3000",
+    "bandera": "🇦🇷"
+  },
+  "+549313131313": {
+    "nombre": "Mili",
+    "diaPago": 21,
+    "monto": "$3000",
+    "bandera": "🇦🇷"
+  },
+  "+521323232323": {
+    "nombre": "Jimin",
+    "diaPago": 21,
+    "monto": "$80",
+    "bandera": "🇲🇽"
+  },
+  "+549333333334": {
+    "nombre": "Ariel",
+    "diaPago": 21,
+    "monto": "$3000",
+    "bandera": "🇦🇷"
+  },
+  "+549343434343": {
+    "nombre": "Erica",
+    "diaPago": 21,
+    "monto": "$3000",
+    "bandera": "🇦🇷"
+  }
+}
