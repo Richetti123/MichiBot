@@ -1,7 +1,7 @@
-const fs = require('fs');
+const fs = require('fs'); 
 const path = require('path');
 
-const OWNER_NUMBER = '+5217771303481'; // Ej: '+549XXXXXXXXX'
+const OWNER_NUMBER = '+5217771303481'; // Cambia por tu número con código país
 const pagosFile = path.join(__dirname, 'src', 'pagos.json');
 
 function cargarPagos() {
@@ -17,20 +17,58 @@ async function enviarMensaje(client, numero, mensaje) {
   await client.sendMessage(numero, { text: mensaje });
 }
 
+// Función para esperar (delay)
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function verificarPagos(client) {
   const pagos = cargarPagos();
   const hoy = new Date().getDate();
   const manana = (new Date(Date.now() + 86400000)).getDate();
 
-  for (const numero in pagos) {
-    const pago = pagos[numero];
-    if (pago.diaPago === hoy || pago.diaPago === manana) {
-      const mensajeUsuario = `💸 *Recordatorio de pago*\nHola *${pago.nombre}*, recordá que el *${pago.diaPago}* de cada mes tenés que abonar *${pago.monto} ${pago.bandera}*.\n¡Por favor, realizá tu pago a tiempo!`;
-      const mensajeOwner = `📣 *Alerta de pago*\n*${pago.nombre}* (${numero}) debe pagar el *${pago.diaPago}* de este mes.\n💰 Monto: *${pago.monto} ${pago.bandera}*`;
+  // Filtrar pagos que vencen hoy o mañana
+  const deudoresHoyManana = Object.entries(pagos)
+    .filter(([numero, pago]) => pago.diaPago === hoy || pago.diaPago === manana);
 
-      await enviarMensaje(client, numero, mensajeUsuario);
-      await enviarMensaje(client, OWNER_NUMBER, mensajeOwner);
-    }
+  if (deudoresHoyManana.length === 0) return;
+
+  // Separar por día para mensaje al owner
+  const listaPorDia = { [hoy]: [], [manana]: [] };
+  deudoresHoyManana.forEach(([_, pago]) => {
+    if (pago.diaPago === hoy) listaPorDia[hoy].push(pago);
+    else listaPorDia[manana].push(pago);
+  });
+
+  // Construir mensaje para owner con lista de hoy y mañana
+  let mensajeOwner = '';
+  if (listaPorDia[hoy].length > 0) {
+    mensajeOwner += `📅 *Pagos para hoy (${hoy}):*\n`;
+    listaPorDia[hoy].forEach(p => {
+      mensajeOwner += `- ${p.nombre}: ${p.monto} ${p.bandera}\n`;
+    });
+  }
+  if (listaPorDia[manana].length > 0) {
+    if (mensajeOwner) mensajeOwner += '\n';
+    mensajeOwner += `📅 *Pagos para mañana (${manana}):*\n`;
+    listaPorDia[manana].forEach(p => {
+      mensajeOwner += `- ${p.nombre}: ${p.monto} ${p.bandera}\n`;
+    });
+  }
+
+  // Enviar mensaje único al owner
+  await enviarMensaje(client, OWNER_NUMBER, mensajeOwner);
+
+  // Enviar mensajes individuales con delay 30 min solo para los que deben hoy
+  const deudoresHoy = deudoresHoyManana.filter(([_, pago]) => pago.diaPago === hoy);
+
+  for (let i = 0; i < deudoresHoy.length; i++) {
+    const [numero, pago] = deudoresHoy[i];
+    const mensajeUsuario = `💸 *Recordatorio de pago*\nHola *${pago.nombre}*, recordá que el *${pago.diaPago}* de cada mes tenés que abonar *${pago.monto} ${pago.bandera}*.\n¡Por favor, realizá tu pago a tiempo!`;
+
+    if (i > 0) await delay(30 * 60 * 1000); // 30 minutos en ms
+
+    await enviarMensaje(client, numero, mensajeUsuario);
   }
 }
 
@@ -64,6 +102,7 @@ async function comandoRegistrarPago(mensaje, client) {
 
   await client.sendMessage(mensaje.from, `✅ Pago registrado:\nNombre: ${nombre}\nNúmero: ${numero}\nDía: ${diaPago}\nMonto: ${monto} ${bandera}`);
 
+  // Ejecutar verificación y envío de recordatorios después de agregar
   await verificarPagos(client);
 }
 
