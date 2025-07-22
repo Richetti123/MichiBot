@@ -17,7 +17,6 @@ async function enviarMensaje(client, numero, mensaje) {
   await client.sendMessage(numero, { text: mensaje });
 }
 
-// Función para esperar (delay)
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -27,20 +26,17 @@ async function verificarPagos(client) {
   const hoy = new Date().getDate();
   const manana = (new Date(Date.now() + 86400000)).getDate();
 
-  // Filtrar pagos que vencen hoy o mañana
   const deudoresHoyManana = Object.entries(pagos)
-    .filter(([numero, pago]) => pago.diaPago === hoy || pago.diaPago === manana);
+    .filter(([_, pago]) => pago.diaPago === hoy || pago.diaPago === manana);
 
   if (deudoresHoyManana.length === 0) return;
 
-  // Separar por día para mensaje al owner
   const listaPorDia = { [hoy]: [], [manana]: [] };
   deudoresHoyManana.forEach(([_, pago]) => {
     if (pago.diaPago === hoy) listaPorDia[hoy].push(pago);
     else listaPorDia[manana].push(pago);
   });
 
-  // Construir mensaje para owner con lista de hoy y mañana
   let mensajeOwner = '';
   if (listaPorDia[hoy].length > 0) {
     mensajeOwner += `📅 *Pagos para hoy (${hoy}):*\n`;
@@ -56,17 +52,15 @@ async function verificarPagos(client) {
     });
   }
 
-  // Enviar mensaje único al owner
   await enviarMensaje(client, OWNER_NUMBER, mensajeOwner);
 
-  // Enviar mensajes individuales con delay 30 min solo para los que deben hoy
   const deudoresHoy = deudoresHoyManana.filter(([_, pago]) => pago.diaPago === hoy);
 
   for (let i = 0; i < deudoresHoy.length; i++) {
     const [numero, pago] = deudoresHoy[i];
     const mensajeUsuario = `💸 *Recordatorio de pago*\nHola *${pago.nombre}*, recordá que el *${pago.diaPago}* de cada mes tenés que abonar *${pago.monto} ${pago.bandera}*.\n¡Por favor, realizá tu pago a tiempo!`;
 
-    if (i > 0) await delay(30 * 60 * 1000); // 30 minutos en ms
+    if (i > 0) await delay(30 * 60 * 1000); // 30 minutos
 
     await enviarMensaje(client, numero, mensajeUsuario);
   }
@@ -102,11 +96,22 @@ async function comandoRegistrarPago(mensaje, client) {
 
   await client.sendMessage(mensaje.from, `✅ Pago registrado:\nNombre: ${nombre}\nNúmero: ${numero}\nDía: ${diaPago}\nMonto: ${monto} ${bandera}`);
 
-  // Ejecutar verificación y envío de recordatorios después de agregar
   await verificarPagos(client);
+}
+
+// Función para iniciar el ciclo automático de recordatorios
+function iniciarRecordatorios(client) {
+  // Ejecutar al iniciar
+  verificarPagos(client).catch(console.error);
+
+  // Ejecutar cada 24 horas
+  setInterval(() => {
+    verificarPagos(client).catch(console.error);
+  }, 24 * 60 * 60 * 1000);
 }
 
 module.exports = {
   comandoRegistrarPago,
   verificarPagos,
+  iniciarRecordatorios,
 };
