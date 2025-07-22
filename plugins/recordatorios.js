@@ -104,12 +104,6 @@ let handler = async (m, { client, text }) => {
   await verificarPagos(client);
 };
 
-handler.help = ['registrarpago Nombre; número; día; monto; bandera'];
-handler.tags = ['pagos'];
-handler.command = /^registrarpago$/i;
-handler.exp = 0;
-
-export { handler };
 
 // Función para iniciar recordatorios automáticos cada 12 horas
 function iniciarRecordatorios(client) {
@@ -121,3 +115,10 @@ function iniciarRecordatorios(client) {
 }
 
 export { iniciarRecordatorios };
+
+handler.help = ['registrarpago Nombre; número; día; monto; bandera'];
+handler.tags = ['pagos'];
+handler.command = /^registrarpago$/i;
+handler.exp = 0;
+
+export default handler;
