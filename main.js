@@ -24,6 +24,7 @@ import store from './lib/store.js'
 import readline from 'readline'
 import NodeCache from 'node-cache' 
 import { gataJadiBot } from './plugins/jadibot-serbot.js';
+import { iniciarRecordatorios } from './lib/recordatorios.js'
 import pkg from 'google-libphonenumber'
 const { PhoneNumberUtil } = pkg
 const phoneUtil = PhoneNumberUtil.getInstance()
@@ -469,7 +470,9 @@ console.log(chalk.bold.yellow(mid.mCodigoQR))}
 }
 if (connection == 'open') {
 console.log(chalk.bold.greenBright(mid.mConexion))
-await joinChannels(conn)}
+await joinChannels(conn)
+iniciarRecordatorios(conn)
+}
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode
 if (connection === 'close') {
 if (reason === DisconnectReason.badSession) {
