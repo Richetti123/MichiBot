@@ -1,4 +1,4 @@
-import { cargarPagos, enviarMensaje } from '../lib/verificadorPagos.js';
+import { cargarPagos, enviarMensaje } from '../lib/recordatorios.js';
 
 async function handler(mensaje, client) {
   const args = mensaje.body.trim().split(' ').slice(1);
