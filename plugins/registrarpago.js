@@ -1,60 +1,68 @@
-// plugins/registrarpago.js
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const pagosFile = path.join(__dirname, '..', 'src', 'pagos.json');
-const OWNER_NUMBER = '+5217771303481';
+let handler = async (m, { conn, text, command, usedPrefix }) => {
+    // Definimos la ruta del archivo de pagos.
+    const paymentsFilePath = path.join(__dirname, '..', '..', 'src', 'pagos.json');
 
-function cargarPagos() {
-  if (!fs.existsSync(pagosFile)) return {};
-  try {
-    return JSON.parse(fs.readFileSync(pagosFile, 'utf8'));
-  } catch {
-    return {};
-  }
-}
+    // Parseamos los argumentos del comando.
+    // Esperamos un formato como: .registrarpago Nombre +5xxxxxxxxxx dia monto bandera
+    const args = text.split(' ').map(arg => arg.trim());
 
-function guardarPagos(pagos) {
-  try {
-    fs.writeFileSync(pagosFile, JSON.stringify(pagos, null, 2));
-  } catch (e) {
-    console.error('Error guardando pagos:', e);
-  }
-}
+    // Validamos que se hayan proporcionado todos los argumentos necesarios.
+    // Esperamos: [nombre, numero, diaPago, monto, bandera]
+    if (args.length < 5) {
+        return m.reply(`*Uso incorrecto del comando:*\nPor favor, proporciona el nombre, número, día de pago, monto y bandera.\nEjemplo: \`\`\`${usedPrefix}${command} Marcelo +569292929292 21 $3000 🇨🇱\`\`\`\n\n*Nota:* El día de pago debe ser un número (1-31).`);
+    }
 
-const handler = async (m, { conn }) => {
-  const texto = m.text || m.body || '';
-  const comandoYArgs = texto.trim().split(' ');
-  comandoYArgs.shift(); // quitar "registrarpago"
-  const argsStr = comandoYArgs.join(' ').trim();
+    const clientName = args[0];
+    const clientNumber = args[1];
+    const diaPago = parseInt(args[2]); // Convertimos a número entero
+    const monto = args[3];
+    const bandera = args[4];
 
-  const args = argsStr.split(';').map(s => s.trim());
-  if (args.length !== 5) {
-    return conn.sendMessage(m.chat, { text: '❌ Uso incorrecto.\nEjemplo:\n.registrarpago Nombre; +569XXXXXXXX; día; monto; bandera' });
-  }
+    // Validaciones adicionales para el número y el día de pago
+    if (!clientNumber.startsWith('+') || clientNumber.length < 5) {
+        return m.reply(`*Número de teléfono inválido:*\nPor favor, asegúrate de que el número comience con '+' y sea un formato válido.\nEjemplo: \`\`\`+569292929292\`\`\``);
+    }
+    if (isNaN(diaPago) || diaPago < 1 || diaPago > 31) {
+        return m.reply(`*Día de pago inválido:*\nEl día de pago debe ser un número entre 1 y 31.\nEjemplo: \`\`\`${usedPrefix}${command} Marcelo +569292929292 *21* $3000 🇨🇱\`\`````);
+    }
 
-  const [nombre, numero, diaStr, monto, bandera] = args;
-  const diaPago = parseInt(diaStr, 10);
+    try {
+        let clientsData = {};
+        // Intentamos leer el archivo pagos.json. Si no existe, creamos un objeto vacío.
+        if (fs.existsSync(paymentsFilePath)) {
+            clientsData = JSON.parse(fs.readFileSync(paymentsFilePath, 'utf8'));
+        }
 
-  if (!nombre || !numero || isNaN(diaPago) || !monto || !bandera) {
-    return conn.sendMessage(m.chat, { text: '❌ Datos inválidos. Verifica que los campos estén correctos.' });
-  }
+        // Verificamos si el número de cliente ya existe para evitar duplicados
+        if (clientsData[clientNumber]) {
+            return m.reply(`❌ El cliente con el número \`\`\`${clientNumber}\`\`\` ya existe en la base de datos.`);
+        }
 
-  const pagos = cargarPagos();
-  pagos[numero] = { nombre, diaPago, monto, bandera };
-  guardarPagos(pagos);
+        // Añadimos el nuevo cliente al objeto. La clave es el número.
+        clientsData[clientNumber] = {
+            nombre: clientName,
+            diaPago: diaPago,
+            monto: monto,
+            bandera: bandera
+        };
 
-  await conn.sendMessage(m.chat, {
-    text: `✅ Pago registrado:\nNombre: ${nombre}\nNúmero: ${numero}\nDía: ${diaPago}\nMonto: ${monto} ${bandera}`
-  });
+        // Guardamos los datos actualizados de nuevo en el archivo JSON
+        fs.writeFileSync(paymentsFilePath, JSON.stringify(clientsData, null, 2), 'utf8');
+
+        m.reply(`✅ Cliente *${clientName}* (${clientNumber}) añadido exitosamente a la base de datos de pagos.`);
+
+    } catch (e) {
+        console.error('Error al procesar el comando .registrarpago:', e);
+        m.reply(`❌ Ocurrió un error interno al intentar añadir el cliente. Por favor, reporta este error.`);
+    }
 };
 
-handler.command = /^registrarpago$/i;
 handler.help = ['registrarpago'];
-handler.tags = ['pagos'];
-handler.exp = 0;
+handler.tags = ['pagos']; // Etiqueta para agrupar comandos relacionados con pagos
+handler.command = /^(registrarpago|agregarcliente)$/i; // Puedes usar .registrarpago, .addclient o .agregarcliente
+handler.owner = true;
 
 export default handler;
