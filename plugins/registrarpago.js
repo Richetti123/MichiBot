@@ -2,22 +2,20 @@
 
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url'; // <-- AÑADE ESTA IMPORTACIÓN
+import { fileURLToPath } from 'url';
 
-// Define __dirname para módulos ES
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename); // <-- AÑADE ESTAS DOS LÍNEAS
+const __dirname = path.dirname(__filename);
 
 let handler = async (m, { conn, text, command, usedPrefix }) => {
     // Definimos la ruta del archivo de pagos.
-    // Ahora, __dirname funcionará correctamente
-    const paymentsFilePath = path.join(__dirname, '..', '..', 'src', 'pagos.json');
+    // MODIFICACIÓN CLAVE AQUÍ: SOLO UN '..'
+    const paymentsFilePath = path.join(__dirname, '..', 'src', 'pagos.json');
 
-    // Parseamos los argumentos del comando.
     const args = text.split(' ').map(arg => arg.trim());
 
     if (args.length < 5) {
-        return m.reply(`*Uso incorrecto del comando:*\nPor favor, proporciona el nombre, número, día de pago, monto y bandera.\nEjemplo: \`\`\`${usedPrefix}${command} Marcelo +569292929292 21 $3000 🇨🇱\`\`\`\n\n*Nota:* El día de pago debe ser un número (1-31).`);
+        return m.reply(`*Uso incorrecto del comando:*\nPor favor, proporciona el nombre, número, día de pago, monto y bandera.\nEjemplo: \`\`\`${usedPrefix}${command} Victoria +569292929292 21 $3000 🇨🇱\`\`\`\n\n*Nota:* El día de pago debe ser un número (1-31).`);
     }
 
     const clientName = args[0];
@@ -35,8 +33,12 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
 
     try {
         let clientsData = {};
+        // Intentamos leer el archivo pagos.json. Si no existe, creamos uno vacío.
         if (fs.existsSync(paymentsFilePath)) {
             clientsData = JSON.parse(fs.readFileSync(paymentsFilePath, 'utf8'));
+        } else {
+            // Si el archivo no existe, lo creamos con un objeto JSON vacío
+            fs.writeFileSync(paymentsFilePath, JSON.stringify({}, null, 2), 'utf8');
         }
 
         if (clientsData[clientNumber]) {
@@ -63,7 +65,6 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
 handler.help = ['registrarpago <nombre> <numero> <diaPago> <monto> <bandera>'];
 handler.tags = ['pagos'];
 handler.command = /^(registrarpago|agregarcliente)$/i;
-handler.group = true;
-handler.admin = true;
+handler.owner = true;
 
 export default handler;
