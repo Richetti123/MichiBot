@@ -1,17 +1,17 @@
+// plugins/recordatorio.js
+
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url'; // <-- AÑADE ESTA IMPORTACIÓN
+import { fileURLToPath } from 'url';
 
-// Define __dirname para módulos ES
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename); // <-- AÑADE ESTAS DOS LÍNEAS
+const __dirname = path.dirname(__filename);
 
 let handler = async (m, { conn, text, command, usedPrefix }) => {
     // Path to your pagos.json file.
-    // Ahora, __dirname funcionará correctamente
-    const paymentsFilePath = path.join(__dirname, '..', '..', 'src', 'pagos.json'); // Sube dos niveles para llegar a la raíz y luego entra a 'src'
+    // MODIFICACIÓN CLAVE AQUÍ: SOLO UN '..'
+    const paymentsFilePath = path.join(__dirname, '..', 'src', 'pagos.json');
 
-    // The client's name will be the text after the command.
     const clientNameInput = text.trim();
 
     if (!clientNameInput) {
@@ -19,6 +19,7 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
     }
 
     try {
+        // Asumiendo que pagos.json siempre existe para leer, si no, deberías añadir un check como en registrarpago.js
         const clientsData = JSON.parse(fs.readFileSync(paymentsFilePath, 'utf8'));
         let clientFound = false;
         let foundClientInfo = null;
@@ -92,7 +93,6 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
 handler.help = ['recordatorio <nombre_cliente>'];
 handler.tags = ['pagos'];
 handler.command = /^(recordatorio)$/i;
-handler.group = true;
-handler.admin = true;
+handler.owner = true;
 
 export default handler;
