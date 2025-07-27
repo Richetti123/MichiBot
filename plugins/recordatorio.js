@@ -8,10 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 let handler = async (m, { conn, text, command, usedPrefix }) => {
-    // Path to your pagos.json file.
-    // MODIFICACIÓN CLAVE AQUÍ: SOLO UN '..'
     const paymentsFilePath = path.join(__dirname, '..', 'src', 'pagos.json');
-
     const clientNameInput = text.trim();
 
     if (!clientNameInput) {
@@ -19,23 +16,26 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
     }
 
     try {
-        // Asumiendo que pagos.json siempre existe para leer, si no, deberías añadir un check como en registrarpago.js
         const clientsData = JSON.parse(fs.readFileSync(paymentsFilePath, 'utf8'));
         let clientFound = false;
         let foundClientInfo = null;
+        let foundPhoneNumberKey = null; // <-- Añadimos una variable para guardar la clave del número
 
         for (const phoneNumberKey in clientsData) {
             const clientInfo = clientsData[phoneNumberKey];
             if (clientInfo.nombre && clientInfo.nombre.toLowerCase() === clientNameInput.toLowerCase()) {
                 clientFound = true;
                 foundClientInfo = clientInfo;
+                foundPhoneNumberKey = phoneNumberKey; // <-- Guardamos la clave (el número)
                 break;
             }
         }
 
-        if (clientFound && foundClientInfo) {
-            const { numero, monto, bandera, nombre } = foundClientInfo;
-            const targetNumberWhatsApp = numero.replace(/\+/g, '') + '@c.us';
+        if (clientFound && foundClientInfo && foundPhoneNumberKey) { // <-- Aseguramos que tengamos la clave
+            const { monto, bandera, nombre } = foundClientInfo;
+            const numero = foundPhoneNumberKey; // <-- ¡Usamos la clave como el número!
+
+            const targetNumberWhatsApp = numero.replace(/\+/g, '') + '@c.us'; // Ahora 'numero' no será undefined
 
             let reminderMessage = `¡Hola ${nombre}! 👋 Este es un recordatorio de tu pago pendiente de ${monto}.`;
             let paymentDetails = '';
@@ -93,6 +93,7 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
 handler.help = ['recordatorio <nombre_cliente>'];
 handler.tags = ['pagos'];
 handler.command = /^(recordatorio)$/i;
-handler.owner = true;
+handler.group = true;
+handler.admin = true;
 
 export default handler;
