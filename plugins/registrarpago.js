@@ -26,7 +26,7 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
         return m.reply(`*Número de teléfono inválido:*\nPor favor, asegúrate de que el número comience con '+' y sea un formato válido.\nEjemplo: \`\`\`+569292929292\`\`\``);
     }
     if (isNaN(diaPago) || diaPago < 1 || diaPago > 31) {
-        return m.reply(`*Día de pago inválido:*\nEl día de pago debe ser un número entre 1 y 31.\nEjemplo: \`\`\`${usedPrefix}${command} Marcelo +569292929292 *21* $3000 🇨🇱\`\`````);
+        return m.reply(`*Día de pago inválido:*\nEl día de pago debe ser un número entre 1 y 31.\nEjemplo: \`\`\`${usedPrefix}${command} Victoria +569292929292 *21* $3000 🇨🇱\`\`\``);
     }
 
     try {
