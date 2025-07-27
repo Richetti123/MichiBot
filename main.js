@@ -24,7 +24,7 @@ import store from './lib/store.js'
 import readline from 'readline'
 import NodeCache from 'node-cache' 
 import { gataJadiBot } from './plugins/jadibot-serbot.js';
-import { iniciarRecordatorios } from './lib/recordatorios.js'
+import sendAutomaticPaymentReminders from './src/automaticReminders.js';
 import pkg from 'google-libphonenumber'
 const { PhoneNumberUtil } = pkg
 const phoneUtil = PhoneNumberUtil.getInstance()
@@ -469,9 +469,16 @@ if (opcion == '1' || methodCodeQR) {
 console.log(chalk.bold.yellow(mid.mCodigoQR))}
 }
 if (connection == 'open') {
-console.log(chalk.bold.greenBright(mid.mConexion))
-await joinChannels(conn)
-iniciarRecordatorios(conn)
+        console.log(chalk.bold.greenBright(mid.mConexion))
+        await joinChannels(conn)
+        iniciarRecordatorios(conn)
+        console.log('Ejecutando la tarea de recordatorios de pago inicial (automático)...');
+        sendAutomaticPaymentReminders(conn); // Ejecuta una vez al inicio
+        setInterval(() => {
+            console.log('Ejecutando la tarea de recordatorios de pago (cada 24 horas - automático)...');
+            sendAutomaticPaymentReminders(conn);
+        }, 86400000); // 24 horas en milisegundos
+        console.log('Recordatorios de pago automáticos programados para verificar cada 24 horas.');
 }
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode
 if (connection === 'close') {
