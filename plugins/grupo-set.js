@@ -281,7 +281,6 @@ handler.command = [
   /^exportcfg$/i,
   /^importcfg$/i
 ]
-handler.group = true
 handler.admin = false // Solo algunas acciones necesitan admin internamente
 
 export default handler
