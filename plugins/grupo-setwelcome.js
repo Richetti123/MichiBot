@@ -6,6 +6,5 @@ conn.reply(m.chat, lenguajeGB.smsSetW(), fkontak, m)
 } else throw `${lenguajeGB['smsSetW2']()}`
 }
 handler.command = ['setwelcome', 'bienvenida'] 
-handler.admin = true
 handler.group = true
 export default handler
