@@ -16,4 +16,5 @@ throw lenguajeGB['smsNam3']()
 }}
 handler.command = /^(setname|newnombre|nuevonombre)$/i
 handler.group = true
+handler.admin = true
 export default handler 
