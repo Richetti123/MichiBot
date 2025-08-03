@@ -75,6 +75,7 @@ const handler = async (m, { conn, command, text }) => {
 };
 
 handler.command = /^(mute|unmute)$/i;
-handler.group = true;
+handler.group = true
+handler.admin = true;
 
 export default handler;
