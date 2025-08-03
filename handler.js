@@ -1154,17 +1154,51 @@ m.exp += Math.ceil(Math.random() * 10)
 let usedPrefix
 let _user = global.db.data && global.db.data.users && global.db.data.users[m.sender]
 
-const groupMetadata = (m.isGroup ? ((conn.chats[m.chat] || {}).metadata || await this.groupMetadata(m.chat).catch(_ => null)) : {}) || {}
-const participants = (m.isGroup ? groupMetadata.participants : []) || []
-let numBot = (conn.user.lid || '').replace(/:.*/, '') || false
-const detectwhat2 = m.sender.includes('@lid') ? `${numBot}@lid` : conn.user.jid
-const user = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.sender) : {}) || {}
-const bot = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) == detectwhat2) : {}) || {}
-const isRAdmin = user?.admin == 'superadmin' || false
-const isAdmin = isRAdmin || user?.admin == 'admin' || false //user admins? 
-const isBotAdmin = bot?.admin || false //Detecta sin el bot es admin
-m.isWABusiness = global.conn.authState?.creds?.platform === 'smba' || global.conn.authState?.creds?.platform === 'smbi'
-m.isChannel = m.chat.includes('@newsletter') || m.sender.includes('@newsletter')
+const groupMetadata = m.isGroup 
+  ? await this.groupMetadata(m.chat).catch(async () => {
+      // Fallback a metadata en conn.chats si falla la obtención
+      return (conn.chats[m.chat] || {}).metadata || {};
+    })
+  : {};
+
+// Lista de participantes con valor por defecto seguro
+const participants = Array.isArray(groupMetadata.participants) 
+  ? groupMetadata.participants 
+  : [];
+
+// Identificación segura del JID del bot
+const botJid = conn.user.jid.includes('@lid') 
+  ? `${(conn.user.lid || conn.user.jid).replace(/:.*/, '')}@lid`
+  : conn.user.jid;
+
+// Información del usuario actual
+const user = m.isGroup 
+  ? participants.find(u => conn.decodeJid(u.id) === conn.decodeJid(m.sender)) || {}
+  : {};
+
+// Información del bot en el grupo
+const bot = m.isGroup 
+  ? participants.find(u => conn.decodeJid(u.id) === conn.decodeJid(botJid)) || {}
+  : {};
+
+// Verificación de permisos con comparaciones estrictas
+const isRAdmin = user?.admin === 'superadmin'; // Solo superadmin
+const isAdmin = isRAdmin || user?.admin === 'admin'; // Cualquier tipo de admin
+const isBotAdmin = bot?.admin === 'admin' || bot?.admin === 'superadmin'; // Bot como admin
+
+// Verificación de tipo de cuenta
+m.isWABusiness = ['smba', 'smbi'].includes(global.conn.authState?.creds?.platform || '');
+m.isChannel = m.chat.endsWith('@newsletter') || m.sender.endsWith('@newsletter');
+
+// Opcional: Logs de depuración (puedes comentar después de probar)
+console.log('Admin Verification:', {
+  user: m.sender,
+  isAdmin,
+  isRAdmin,
+  isBotAdmin,
+  group: m.chat,
+  timestamp: new Date().toISOString()
+});
 	
 const ___dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), './plugins')
 for (let name in global.plugins) {
