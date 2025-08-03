@@ -7,4 +7,5 @@ conn.reply(m.chat, lenguajeGB.smsSetB(), fkontak, m)
 }
 handler.command = ['setbye', 'despedida'] 
 handler.group = true
+handler.admin = true
 export default handler
