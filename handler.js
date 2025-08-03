@@ -26,11 +26,6 @@ resolve()
 export async function handler(chatUpdate) {
 this.msgqueque = this.msgqueque || [];
 this.uptime = this.uptime || Date.now();
-if (m.isGroup) {
-      const groupMetadata = await this.groupMetadata(m.chat)
-      const groupAdmins = groupMetadata.participants.filter(v => v.admin).map(v => v.id)
-      m.isAdmin = groupAdmins.includes(m.sender)
-  }
 if (!chatUpdate) {
 return
 }
@@ -50,6 +45,11 @@ global.mconn = m
 if (!m)
 return
 m.exp = 0
+if (m.isGroup) {
+const groupMetadata = await this.groupMetadata(m.chat)
+const groupAdmins = groupMetadata.participants.filter(v => v.admin).map(v => v.id)
+m.isAdmin = groupAdmins.includes(m.sender)
+}
 m.limit = false
 m.money = false
 try {
