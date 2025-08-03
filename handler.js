@@ -1092,7 +1092,7 @@ antiCall: true,
 antiSpam: true,
 modoia: false, 
 anticommand: false, 
-prefix: opts['prefix'] || '*/i!#$%+£¢€¥^°=¶∆×÷π√✓©®&.\\-.@',
+prefix: opts['prefix'] || '*/i!#$%+£¢€¥^°=¶∆×÷π√✓©®&.\\-.@Aa',
 jadibotmd: true,
 }} catch (e) {
 console.error(e)
@@ -1100,7 +1100,7 @@ console.error(e)
 
 var settings = global.db.data.settings[this.user.jid];
 let prefix;
-const defaultPrefix = '*/i!#$%+£¢€¥^°=¶∆×÷π√✓©®&.\\-.@'; // Valor por defecto
+const defaultPrefix = '*/i!#$%+£¢€¥^°=¶∆×÷π√✓©®&.\\-.@Aa'; // Valor por defecto
 if (settings.prefix) {
 if (settings.prefix.includes(',')) {
 const prefixes = settings.prefix.split(',').map(p => p.trim());
@@ -1189,7 +1189,7 @@ if (plugin.tags && plugin.tags.includes('admin')) {
 // global.dfail('restrict', m, this)
 continue
 }
-const str2Regex = str => str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
+const str2Regex = str => str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&Aa');
             let _prefix = plugin.customPrefix ? plugin.customPrefix : this.prefix ? this.prefix : prefix; // Usamos prefix local
             let match = (_prefix instanceof RegExp ?
                 [[_prefix.exec(m.text), _prefix]] :
