@@ -39,5 +39,6 @@ let handler = async (m, { conn, text, participants, args, command }) => {
 };
 
 handler.command = /^(tagall|invocar|invocacion|todos|invocación|contador)$/i;
-handler.group = true;
+handler.group = true
+handler.admin = true;
 export default handler;
