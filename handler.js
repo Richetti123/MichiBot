@@ -1151,22 +1151,21 @@ let _user = global.db.data && global.db.data.users && global.db.data.users[m.sen
 
 const groupMetadata = (m.isGroup ? ((conn.chats[m.chat] || {}).metadata || await this.groupMetadata(m.chat).catch(_ => null)) : {}) || {}
 const participants = (m.isGroup ? groupMetadata.participants : []) || []
-let numBot = (conn.user.lid || '').replace(/:.*/, '') || false
-const detectwhat2 = m.sender.includes('@lid') ? `${numBot}@lid` : conn.user.jid
 
-// Normaliza el JID del remitente para que coincida con el formato en la lista de participantes
+// Normaliza el JID del remitente para una búsqueda precisa
 const senderNormalized = conn.decodeJid(m.sender);
 
-// Normaliza el JID del bot para la comparación
-const botJidNormalized = conn.decodeJid(detectwhat2);
+// Normaliza el JID del bot
+const botJidNormalized = conn.decodeJid(conn.user.jid);
 
-const user = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) === senderNormalized) : {}) || {}
-const bot = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) === botJidNormalized) : {}) || {}
+// Encuentra el objeto del usuario en la lista de participantes usando el JID normalizado
+const user = m.isGroup ? participants.find(u => conn.decodeJid(u.id) === senderNormalized) : null;
+// Encuentra el objeto del bot en la lista de participantes usando el JID normalizado
+const bot = m.isGroup ? participants.find(u => conn.decodeJid(u.id) === botJidNormalized) : null;
 
 const isRAdmin = user?.admin === 'superadmin';
-const isAdmin = isRAdmin || user?.admin === 'admin'; // Verifica si el usuario es admin o superadmin
-
-const isBotAdmin = bot?.admin === 'superadmin' || bot?.admin === 'admin'; // Verifica si el bot es admin o superadmin
+const isAdmin = isRAdmin || user?.admin === 'admin';
+const isBotAdmin = bot?.admin === 'superadmin' || bot?.admin === 'admin';
 
 m.isWABusiness = global.conn.authState?.creds?.platform === 'smba' || global.conn.authState?.creds?.platform === 'smbi'
 m.isChannel = m.chat.includes('@newsletter') || m.sender.includes('@newsletter')
