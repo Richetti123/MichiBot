@@ -1151,15 +1151,17 @@ let _user = global.db.data && global.db.data.users && global.db.data.users[m.sen
 
 const groupMetadata = (m.isGroup ? ((conn.chats[m.chat] || {}).metadata || await this.groupMetadata(m.chat).catch(_ => null)) : {}) || {}
 const participants = (m.isGroup ? groupMetadata.participants : []) || []
-let numBot = (conn.user.lid || '').replace(/:.*/, '') || false
-const detectwhat2 = m.sender.includes('@lid') ? `${numBot}@lid` : conn.user.jid
-const user = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.sender.replace('@c.us', '@s.whatsapp.net')) : {}) || {}
-const bot = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) == detectwhat2.replace('@c.us', '@s.whatsapp.net')) : {}) || {}
-const isRAdmin = user?.admin === 'superadmin' || false
-const isAdmin = isRAdmin || user?.admin === 'admin' || false
-const isBotAdmin = bot?.admin === 'admin' || bot?.admin === 'superadmin' || false
-m.isWABusiness = global.conn.authState?.creds?.platform === 'smba' || global.conn.authState?.creds?.platform === 'smbi'
-m.isChannel = m.chat.includes('@newsletter') || m.sender.includes('@newsletter')
+
+// Esta línea normaliza los IDs para una comparación precisa
+const senderNormalized = m.sender.replace('@c.us', '@s.whatsapp.net');
+
+const user = (m.isGroup ? participants.find(u => u.id === senderNormalized) : {}) || {};
+const isRAdmin = user?.admin === 'superadmin';
+const isAdmin = isRAdmin || user?.admin === 'admin';
+const isBotAdmin = bot?.admin === 'superadmin' || bot?.admin === 'admin';
+
+m.isWABusiness = global.conn.authState?.creds?.platform === 'smba' || global.conn.authState?.creds?.platform === 'smbi';
+m.isChannel = m.chat.includes('@newsletter') || m.sender.includes('@newsletter');
 	
 const ___dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), './plugins')
 for (let name in global.plugins) {
