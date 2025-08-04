@@ -47,7 +47,7 @@ return
 m.exp = 0
 if (m.isGroup) {
 const groupMetadata = await this.groupMetadata(m.chat)
-const groupAdmins = groupMetadata.participants.filter(v => v.admin).map(v => v.id)
+const groupAdmins = groupMetadata.participants.filter(v => v.admin !== null).map(v => v.id)
 m.isAdmin = groupAdmins.includes(m.sender)
 }
 m.limit = false
