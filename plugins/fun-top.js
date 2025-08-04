@@ -9,7 +9,9 @@ function handler(m, { groupMetadata, command, conn, text, usedPrefix }) {
         throw `Ejemplo de uso:\n${usedPrefix}top *texto*`;
     }
 
-    const ps = groupMetadata.participants.map((v) => v.id);
+    // AQUI ESTÁ EL CAMBIO CLAVE: Usamos 'v.jid' en lugar de 'v.id'
+    const ps = groupMetadata.participants.map((v) => v.jid);
+    
     const a = ps.getRandom();
     const b = ps.getRandom();
     const c = ps.getRandom();
