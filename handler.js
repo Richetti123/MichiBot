@@ -1153,11 +1153,11 @@ const groupMetadata = (m.isGroup ? ((conn.chats[m.chat] || {}).metadata || await
 const participants = (m.isGroup ? groupMetadata.participants : []) || []
 let numBot = (conn.user.lid || '').replace(/:.*/, '') || false
 const detectwhat2 = m.sender.includes('@lid') ? `${numBot}@lid` : conn.user.jid
-const user = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.sender) : {}) || {}
-const bot = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) == detectwhat2) : {}) || {}
-const isRAdmin = user?.admin == 'superadmin' || false
-const isAdmin = isRAdmin || user?.admin == 'admin' || false //user admins? 
-const isBotAdmin = bot?.admin || false //Detecta sin el bot es admin
+const user = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.sender.replace('@c.us', '@s.whatsapp.net')) : {}) || {}
+const bot = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) == detectwhat2.replace('@c.us', '@s.whatsapp.net')) : {}) || {}
+const isRAdmin = user?.admin === 'superadmin' || false
+const isAdmin = isRAdmin || user?.admin === 'admin' || false
+const isBotAdmin = bot?.admin === 'admin' || bot?.admin === 'superadmin' || false
 m.isWABusiness = global.conn.authState?.creds?.platform === 'smba' || global.conn.authState?.creds?.platform === 'smbi'
 m.isChannel = m.chat.includes('@newsletter') || m.sender.includes('@newsletter')
 	
