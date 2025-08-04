@@ -1151,40 +1151,24 @@ let _user = global.db.data && global.db.data.users && global.db.data.users[m.sen
 
 const groupMetadata = (m.isGroup ? ((conn.chats[m.chat] || {}).metadata || await this.groupMetadata(m.chat).catch(_ => null)) : {}) || {}
 const participants = (m.isGroup ? groupMetadata.participants : []) || []
-
-// --- LOGS DE DEPURACIÓN ---
-console.log('--- INICIO DE DEPURACIÓN DE JIDS Y ADMINISTRADORES ---');
-console.log('JID del remitente (m.sender):', m.sender);
+let numBot = (conn.user.lid || '').replace(/:.*/, '') || false
+const detectwhat2 = m.sender.includes('@lid') ? `${numBot}@lid` : conn.user.jid
 
 // Normaliza el JID del remitente para una búsqueda precisa
 const senderNormalized = conn.decodeJid(m.sender);
-console.log('JID del remitente normalizado (senderNormalized):', senderNormalized);
 
 // Normaliza el JID del bot para la comparación
 const botJidNormalized = conn.decodeJid(conn.user.jid);
-console.log('JID del bot normalizado (botJidNormalized):', botJidNormalized);
 
-// Lista completa de participantes del grupo
-console.log('Lista de participantes del grupo:', participants);
+// Encuentra el objeto del usuario comparando el JID normalizado con el campo 'jid' del participante
+const user = (m.isGroup ? participants.find(u => u.jid === senderNormalized) : {}) || {}
 
-// Encuentra el objeto del usuario en la lista de participantes usando el JID normalizado
-const user = m.isGroup ? participants.find(u => conn.decodeJid(u.id) === senderNormalized) : null;
-// Encuentra el objeto del bot en la lista de participantes usando el JID normalizado
-const bot = m.isGroup ? participants.find(u => conn.decodeJid(u.id) === botJidNormalized) : null;
+// Encuentra el objeto del bot comparando el JID normalizado con el campo 'jid' del participante
+const bot = (m.isGroup ? participants.find(u => u.jid === botJidNormalized) : {}) || {}
 
-// Muestra el resultado de la búsqueda
-console.log('Objeto del usuario encontrado:', user);
-console.log('Objeto del bot encontrado:', bot);
-
-const isRAdmin = user?.admin === 'superadmin';
-const isAdmin = isRAdmin || user?.admin === 'admin';
-const isBotAdmin = bot?.admin === 'superadmin' || bot?.admin === 'admin';
-
-// Muestra los resultados finales de las verificaciones
-console.log('¿Es superadmin (isRAdmin)?', isRAdmin);
-console.log('¿Es admin (isAdmin)?', isAdmin);
-console.log('¿Es el bot admin (isBotAdmin)?', isBotAdmin);
-console.log('--- FIN DE DEPURACIÓN ---');
+const isRAdmin = user?.admin === 'superadmin' || false
+const isAdmin = isRAdmin || user?.admin === 'admin' || false
+const isBotAdmin = bot?.admin === 'superadmin' || bot?.admin === 'admin' || false
 
 m.isWABusiness = global.conn.authState?.creds?.platform === 'smba' || global.conn.authState?.creds?.platform === 'smbi'
 m.isChannel = m.chat.includes('@newsletter') || m.sender.includes('@newsletter')
