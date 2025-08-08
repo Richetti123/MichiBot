@@ -1150,7 +1150,7 @@ let usedPrefix
 let _user = global.db.data && global.db.data.users && global.db.data.users[m.sender]
 
 const groupMetadata = (m.isGroup ? ((conn.chats[m.chat] || {}).metadata || await this.groupMetadata(m.chat).catch(_ => null)) : {}) || {}
-const participants = (m.isGroup ? groupMetadata.participants : []) || []
+const participants = (m.isGroup ? groupMetadata.participants.map(v => ({ ...v, id: v.jid })) : []) || []
 let numBot = (conn.user.lid || '').replace(/:.*/, '') || false
 const detectwhat2 = m.sender.includes('@lid') ? `${numBot}@lid` : conn.user.jid
 
