@@ -103,5 +103,6 @@ handler.help = ['group open/close', 'grupo abrir/cerrar', 'grupo aprobar +number
 handler.tags = ['group'];
 handler.command = /^(group|grupo)$/i;
 handler.exp = 200;
+handler.admin = true
 
 export default handler;
