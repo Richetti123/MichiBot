@@ -52,7 +52,7 @@ const selectedQuality = (isAudio ? audioQualities : videoQualities).includes(qua
 
 const audioApis = [
 { url: () => ogmp3.download(userVideoData.url, selectedQuality, 'audio'), extract: (data) => ({ data: data.result.download, isDirect: false }) },
-{ url: () => fetch(`https://apis-starlights-team.koyeb.app/starlight/youtube-mp3?url=${encodeURIComponent(userVideoData.url)}`).then(r => r.ok ? r.json() : {}).catch(() => ({})), extract: d => ({ data: d?.data?.download?.url || null, isDirect: true, title: d?.data?.title || null, duration: d?.data?.duration || null, thumbnail: d?.data?.image_max_resolution || null }) },
+{ url: () => fetch(`https://apis-starlights-team.koyeb.app/starlight/youtube-mp3?url=${encodeURIComponent(userVideoData.url)}`).then(r => r.ok ? r.json() : {status:false}).catch(()=>({status:false})), extract: d => d?.status && d?.data?.download?.url ? {data:d.data.download.url,isDirect:true,title:d.data.title,duration:d.data.duration,thumbnail:d.data.image_max_resolution} : {data:null,isDirect:false,title:"Error: no se pudo obtener audio",duration:0,thumbnail:null} },
 { url: () => fetch(`${global.APIs.stellar.url}/dow/ytmp3?url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data?.data?.dl, isDirect: false }) },
 { url: () => fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data.dl, isDirect: false }) },
 { url: () => fetch(`https://api.zenkey.my.id/api/download/ytmp3?apikey=zenkey&url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data.result.download.url, isDirect: false }) }
@@ -60,7 +60,7 @@ const audioApis = [
 
 const videoApis = [
 { url: () => ogmp3.download(userVideoData.url, selectedQuality, 'video'), extract: (data) => ({ data: data.result.download, isDirect: false }) },
-{ url: () => fetch(`https://apis-starlights-team.koyeb.app/starlight/youtube-mp4?url=${encodeURIComponent(userVideoData.url)}`).then(r => r.ok ? r.json() : {}).catch(() => ({})), extract: d => ({ data: d?.data?.download?.url || null, isDirect: true, title: d?.data?.title || null, duration: d?.data?.duration || null, thumbnail: d?.data?.image_max_resolution || null }) },
+{ url: () => fetch(`https://apis-starlights-team.koyeb.app/starlight/youtube-mp4?url=${encodeURIComponent(userVideoData.url)}`).then(r => r.ok ? r.json() : {status:false}).catch(()=>({status:false})), extract: d => d?.status && d?.data?.download?.url ? {data:d.data.download.url,isDirect:true,title:d.data.title,duration:d.data.duration,thumbnail:d.data.image_max_resolution} : {data:null,isDirect:false,title:"Error: no se pudo obtener video",duration:0,thumbnail:null} },
 { url: () => fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data.dl, isDirect: false }) },
 { url: () => fetch(`${global.APIs.stellar.url}/dow/ytmp4?url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data?.data?.dl, isDirect: false }) },
 { url: () => fetch(`https://exonity.tech/api/ytdlp2-faster?apikey=adminsepuh&url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data.result.media.mp4, isDirect: false }) }
