@@ -5,7 +5,6 @@ import ytdl from 'ytdl-core';
 import { ogmp3 } from '../lib/youtubedl.js'; 
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-const { ytmp3, ytmp4 } = require("@hiudyy/ytdl");
 const LimitAud = 700 * 1024 * 1024; // 700MB
 
 let handler = async (m, { text, conn, args, usedPrefix, command }) => {
@@ -37,8 +36,7 @@ const selectedQuality = validQualities.includes(quality) ? quality : '320';
 
 const audioApis = [
 { url: () => ogmp3.download(yt_play[0].url, selectedQuality, 'audio'), extract: (data) => ({ data: data.result.download, isDirect: false }) },
-{ url: () => ytmp3(args), extract: (data) => ({ data, isDirect: true }) },
-{ url: () => fetch(`https://api.neoxr.eu/api/youtube?url=${args}&type=audio&quality=128kbps&apikey=GataDios`).then(res => res.json()), extract: (data) => ({ data: data.data.url, isDirect: false }) },
+{ url: () => fetch(`${apis}/download/ytmp3?url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data.status ? data.data.download.url : null, isDirect: false }) },
 { url: () => fetch(`https://api.fgmods.xyz/api/downloader/ytmp4?url=${args}&apikey=${fgkeysapi}`).then(res => res.json()), extract: (data) => ({ data: data.result.dl_url, isDirect: false }) },
 { url: () => fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${yt_play[0].url}`).then(res => res.json()), extract: (data) => ({ data: data.dl, isDirect: false }) },
 { url: async () => {
