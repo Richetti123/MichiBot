@@ -51,10 +51,7 @@ const isAudio = text === '🎶' || text === 'audio';
 const selectedQuality = (isAudio ? audioQualities : videoQualities).includes(qualityInput) ? qualityInput : (isAudio ? '320' : '720');
 
 const audioApis = [
-{ url: () => fetch(`https://apis-starlights-team.koyeb.app/starlight/youtube-mp3?url=${userVideoData.url}`)
-  .then(async r => { console.log('Audio fetch status:', r.status); const text = await r.text(); console.log('Audio raw response:', text); try { return JSON.parse(text); } catch { return {status:false}; } })
-  .catch(err => { console.error('Audio fetch error:', err); return {status:false}; }), 
-  extract: d => { console.log('Audio extract:', d); return d?.status && d?.data?.download?.url ? {data:d.data.download.url,isDirect:true,title:d.data.title,duration:d.data.duration,thumbnail:d.data.image_max_resolution} : {data:null,isDirect:false,title:"Error: no se pudo obtener audio",duration:0,thumbnail:null} } }
+{ url: async () => { console.log('Audio URL fetch:', userVideoData.url); const res = await fetch(`https://apis-starlights-team.koyeb.app/download/ytmp3?url=${userVideoData.url}`); console.log('Audio fetch status:', res.status); const text = await res.text(); console.log('Audio raw response:', text); try { const data = JSON.parse(text); console.log('Audio extract:', data); return { data: data?.status ? data?.data?.download?.url : null, isDirect: false }; } catch(e) { console.log('Audio fetch error:', e); return { data: null, isDirect: false }; } } }
 ];
 
 const videoApis = [
