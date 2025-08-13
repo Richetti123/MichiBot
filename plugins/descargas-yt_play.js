@@ -52,7 +52,7 @@ const selectedQuality = (isAudio ? audioQualities : videoQualities).includes(qua
 
 const audioApis = [
 { url: () => ogmp3.download(userVideoData.url, selectedQuality, 'audio'), extract: (data) => ({ data: data.result.download, isDirect: false }) },
-{ url: () => fetch(`${apis}/download/ytmp3?url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data?.url || null, isDirect: false }) },
+{ url: () => fetch(`https://apis-starlights-team.koyeb.app/starlight/youtube-mp3?url=${encodeURIComponent(userVideoData.url)}`).then(res => res.json()), extract: d => ({ data: d && d.url ? d.url : null, isDirect: true, title: d?.title, duration: d?.duration, thumbnail: d?.thumbnail }) },
 { url: () => fetch(`${global.APIs.stellar.url}/dow/ytmp3?url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data?.data?.dl, isDirect: false }) },
 { url: () => fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data.dl, isDirect: false }) },
 { url: () => fetch(`https://api.zenkey.my.id/api/download/ytmp3?apikey=zenkey&url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data.result.download.url, isDirect: false }) }
