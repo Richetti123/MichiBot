@@ -52,10 +52,26 @@ const selectedQuality = (isAudio ? audioQualities : videoQualities).includes(qua
 
 const audioApis = [
 {
-  url: () => fetch(`https://delirius-apiofc.vercel.app/download/ytmp3?url=${userVideoData.url}`)
-          .then(res => res.json())
-          .catch(err => { console.log('Audio fetch error:', err); return {}; }),
-  extract: (data) => ({ data: data?.status ? data?.data?.download?.url : null, isDirect: false })
+  url: async () => {
+    try {
+      console.log('Audio URL fetch:', `https://delirius-apiofc.vercel.app/download/ytmp3?url=${userVideoData.url}`);
+      const res = await fetch(`https://delirius-apiofc.vercel.app/download/ytmp3?url=${userVideoData.url}`);
+      console.log('Audio fetch status:', res.status);
+      const json = await res.json().catch(e => {
+        console.log('Audio raw response:', e);
+        return {};
+      });
+      console.log('Audio raw response:', JSON.stringify(json, null, 2));
+      return json;
+    } catch (err) {
+      console.log('Audio fetch error:', err);
+      return {};
+    }
+  },
+  extract: (data) => {
+    console.log('Audio extract:', data);
+    return { data: data?.status ? data?.data?.download?.url : null, isDirect: false };
+  }
 }
 ];
 
