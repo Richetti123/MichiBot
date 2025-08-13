@@ -6,7 +6,6 @@ import axios from 'axios';
 import { ogmp3 } from '../lib/youtubedl.js'; 
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-const { ytmp3, ytmp4 } = require("@hiudyy/ytdl");
 const LimitVid = 450 * 1024 * 1024; // 450MB
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
@@ -38,9 +37,8 @@ const selectedQuality = validQualities.includes(quality) ? quality : '720';
 
 const videoApis = [
 { url: () => ogmp3.download(yt_play[0].url, selectedQuality, 'video'), extract: (data) => ({ data: data.result.download, isDirect: false }) },
-{ url: () => ytmp4(args), extract: (data) => ({ data, isDirect: false }) },
 { url: () => fetch(`https://api.siputzx.my.id/api/d/ytmp4?url=${args}`).then(res => res.json()), extract: (data) => ({ data: data.dl, isDirect: false }) },
-{ url: () => fetch(`https://api.neoxr.eu/api/youtube?url=${args}&type=video&quality=720p&apikey=GataDios`).then(res => res.json()), extract: (data) => ({ data: data.data.url, isDirect: false }) },
+{ url: () => fetch(`${apis}/download/ytmp4?url=${userVideoData.url}`).then(res => res.json()), extract: (data) => ({ data: data.status ? data.data.download.url : null, isDirect: false }) },
 { url: () => fetch(`${global.APIs.fgmods.url}/downloader/ytmp4?url=${args}&apikey=${global.APIs.fgmods.key}`).then(res => res.json()), extract: (data) => ({ data: data.result.dl_url, isDirect: false }) },
 { url: () => fetch(`${apis}/download/ytmp4?url=${args}`).then(res => res.json()), extract: (data) => ({ data: data.status ? data.data.download.url : null, isDirect: false }) },
 { url: () => fetch(`https://exonity.tech/api/ytdlp2-faster?apikey=adminsepuh&url=${args}`).then(res => res.json()), extract: (data) => ({ data: data.result.media.mp4, isDirect: false }) },
