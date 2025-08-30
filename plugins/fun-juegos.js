@@ -205,7 +205,7 @@ if (!text) return m.reply(`${lenguajeGB['smsAvisoMG']()}𝙀𝙏𝙄𝙌𝙐𝙀
 let juego = `*❤️❤️ MEDIDOR DE AMOR ❤️❤️*\n*_El amor de ${text.toUpperCase()} ES DE ${(500).getRandom()}% Deberias pedirle que sea tu novia/o ?_*`.trim()
 await conn.reply(m.chat, juego, m, m.mentionedJid ? { mentions: m.mentionedJid } : {})
 } else if (command == 'topgays') {
-let vn = 'https://qu.ax/vSEUo.m4a'
+let vn = 'https://qu.ax/vfCep.mp3'
 let top = `*🌈TOP 10 GAYS/LESBIANAS DEL GRUPO🌈*
  
 *_1.- 🏳️‍🌈 ${formatJid(a)}_* 🏳️‍🌈
