@@ -1,3 +1,6 @@
+// Aunque ya no se usa, se mantiene para evitar errores de importación si es una dependencia obligatoria.
+import { perplexity } from '../lib/chatgpt.js';
+
 const handler = async (m, { conn, text, usedPrefix, command }) => {
     // Si el prefijo es 'a' o 'A', se detiene la ejecución
     if (usedPrefix.toLowerCase() === 'a') return;
@@ -65,9 +68,10 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
         }
     } catch (e) {
         console.error('Error al procesar la solicitud:', e.message);
-        await m.reply('❌ Lo siento, ocurrió un error al procesar tu solicitud. Intenta de nuevo más tarde.');
+        await m.reply(`❌ Lo siento, ocurrió un error al procesar tu solicitud. Detalles del error: ${e.message}`);
     }
 };
 
+// Se actualizó el nombre del comando para incluir todas las opciones
 handler.command = /^(openai|chatgpt|ia|ai|openai2|chatgpt2|ia2)$/i;
 export default handler;
