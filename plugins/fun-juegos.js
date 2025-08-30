@@ -1,12 +1,12 @@
 import util from 'util'
 import path from 'path' 
-let toM = a => '@' + a.split('@')[0]
+let toM = a => '@' + jid.split('@')[0]
 let handler = async (m, { conn, groupMetadata, participants, command, text, usedPrefix, sender}) => {
 if (!db.data.chats[m.chat].game) throw `${lenguajeGB['smsAvisoAG']()}𝙇𝙊𝙎 𝙅𝙐𝙀𝙂𝙊𝙎 𝙀𝙎𝙏𝘼𝙎 𝘿𝙀𝙎𝘼𝘾𝙏𝙄𝙑𝘼𝘿𝙊 𝙀𝙉 𝙀𝙎𝙏𝙀 𝙂𝙍𝙐𝙋𝙊, 𝙎𝙄 𝙀𝙍𝙀𝙎 𝘼𝘿𝙈𝙄𝙉𝙎 𝙋𝙐𝙀𝘿𝙀 𝘼𝘾𝙏𝙄𝙑𝘼𝙍𝙇𝙊 𝘾𝙊𝙉 : #on juegos` 
 try {
 
-let user = a => '@' + a.split('@')[0] //'@' + a.split('@')[0]
-let ps = groupMetadata.participants.map(v => v.id)
+let user = a => '@' + jid.split('@')[0] //'@' + a.split('@')[0]
+let ps = groupMetadata.participants.map(v => v.jid)
 let a = ps.getRandom()
 let b = ps.getRandom() 
 let c = ps.getRandom()
@@ -178,7 +178,7 @@ if (ruleta === 'text6') return m.reply(`👑 𝙂𝙐𝘼𝘼 𝙀𝙎𝙏𝘼�
 // ------------------------------------------------------------------------------------------------------------------------------------------------
 
 if (command == 'gay') {    
-let vn = 'https://qu.ax/HfeP.mp3';
+let vn = 'https://qu.ax/vSEUo.m4a';
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 conn.sendFile(m.chat, global.API('https://some-random-api.com', '/canvas/gay', {  
 avatar: await conn.profilePictureUrl(who, 'image').catch(_ => 'https://telegra.ph/file/24fa902ead26340f3df2c.png'),   
@@ -273,7 +273,7 @@ await conn.reply(m.chat, juego, m, m.mentionedJid ? { mentions: m.mentionedJid }
  // ------------------------------------------------------------------------------------------------------------------------------------------------   
  
  if (command == 'topgays') {
-let vn = 'https://qu.ax/HfeP.mp3'
+let vn = 'https://qu.ax/vSEUo.m4a'
 let top = `*🌈TOP 10 GAYS/LESBIANAS DEL GRUPO🌈*
     
 *_1.- 🏳️‍🌈 ${user(a)}_* 🏳️‍🌈
