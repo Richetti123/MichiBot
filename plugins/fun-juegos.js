@@ -371,8 +371,8 @@ Tan enamorados 😍, para cuando la familia 🥰
 Genial! 💝, están de Luna de miel 🥵✨❤️‍🔥`
 m.reply(top, null, { mentions: conn.parseMention(top) })
 } else if (command == 'sorteo') {
-let ps = groupMetadata.participants.map(v => v.id)
-let a = ps.getRandom()
+let ps = groupMetadata.participants.map(v => v.jid);
+let a = ps.getRandom();
 let k = Math.floor(Math.random() * 70)
 let vn = `https://hansxd.nasihosting.com/sound/sound${k}.mp3`
 let top = `*\`[ 🥳 ＦＥＬＩＣＩＤＡＤＥＳ 🥳]\`*\n\n${formatJid(a)} 🥳\nAcaba de ganar el sorteo felicitaciones 🎉`
