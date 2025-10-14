@@ -1149,26 +1149,58 @@ m.exp += Math.ceil(Math.random() * 10)
 let usedPrefix
 let _user = global.db.data && global.db.data.users && global.db.data.users[m.sender]
 
-const groupMetadata = (m.isGroup ? ((conn.chats[m.chat] || {}).metadata || await this.groupMetadata(m.chat).catch(_ => null)) : {}) || {}
-const participants = (m.isGroup ? groupMetadata.participants.map(v => ({ ...v, id: v.jid })) : []) || []
-let numBot = (conn.user.lid || '').replace(/:.*/, '') || false
-const detectwhat2 = m.sender.includes('@lid') ? `${numBot}@lid` : conn.user.jid
+const groupMetadata = m.isGroup
+? (global.cachedGroupMetadata
+? await global.cachedGroupMetadata(m.chat).catch((_) => null)
+: await this.groupMetadata(m.chat).catch((_) => null)) || {}
+: {}
+const participants = Array.isArray(groupMetadata?.participants) ? groupMetadata.participants : []
 
-// Normaliza el JID del remitente para una búsqueda precisa
-const senderNormalized = conn.decodeJid(m.sender);
+const decode = (j) => this.decodeJid(j)
+const norm = (j) => jidNormalizedUser(decode(j))
+const numOnly = (j) =>
+String(decode(j))
+.split('@')[0]
+.replace(/[^0-9]/g, '')
 
-// Normaliza el JID del bot para la comparación
-const botJidNormalized = conn.decodeJid(conn.user.jid);
+const meIdRaw = this.user?.id || this.user?.jid // ej: 5215...:26@s.whatsapp.net
+const meLidRaw = (this.user?.lid || conn?.user?.lid || '').toString().replace(/:.*/, '') || null // ej: 2064... (solo números)
+const botNum = numOnly(meIdRaw)
 
-// Encuentra el objeto del usuario comparando el JID normalizado con el campo 'jid' del participante
-const user = (m.isGroup ? participants.find(u => u.jid === senderNormalized) : {}) || {}
+const botCandidates = [
+decode(meIdRaw),
+jidNormalizedUser(decode(meIdRaw)),
+botNum,
+meLidRaw && `${meLidRaw}@lid`,
+meLidRaw && jidNormalizedUser(`${meLidRaw}@lid`),
+meLidRaw && `${meLidRaw}@s.whatsapp.net`
+].filter(Boolean)
 
-// Encuentra el objeto del bot comparando el JID normalizado con el campo 'jid' del participante
-const bot = (m.isGroup ? participants.find(u => u.jid === botJidNormalized) : {}) || {}
+const senderCandidates = [decode(m.sender), jidNormalizedUser(decode(m.sender)), numOnly(m.sender)]
 
-const isRAdmin = user?.admin === 'superadmin' || false
-const isAdmin = isRAdmin || user?.admin === 'admin' || false
-const isBotAdmin = bot?.admin === 'superadmin' || bot?.admin === 'admin' || false
+const participantsMap = {}
+for (const p of participants) {
+const raw = p.jid || p.id
+const dj = decode(raw)
+const nj = jidNormalizedUser(dj)
+const no = numOnly(dj)
+participantsMap[dj] = p
+participantsMap[nj] = p
+participantsMap[no] = p
+}
+
+const pick = (cands) => {
+for (const k of cands) if (participantsMap[k]) return participantsMap[k]
+// Fallback: comparación semántica por JID
+return participants.find((p) => cands.some((c) => areJidsSameUser(norm(p.jid || p.id), jidNormalizedUser(decode(c))))) || null
+}
+
+const user = m.isGroup ? pick(senderCandidates) || {} : {}
+const bot = m.isGroup ? pick(botCandidates) || {} : {}
+
+const isRAdmin = user?.admin === 'superadmin'
+const isAdmin = isRAdmin || user?.admin === 'admin' || user?.admin === true
+const isBotAdmin = bot?.admin === 'admin' || bot?.admin === 'superadmin' || bot?.admin === true
 
 m.isWABusiness = global.conn.authState?.creds?.platform === 'smba' || global.conn.authState?.creds?.platform === 'smbi'
 m.isChannel = m.chat.includes('@newsletter') || m.sender.includes('@newsletter')
