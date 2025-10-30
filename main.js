@@ -360,7 +360,7 @@ msgRetryCounterCache: msgRetryCounterCache || new Map(),
 userDevicesCache: userDevicesCache || new Map(),
 defaultQueryTimeoutMs: undefined,
 cachedGroupMetadata: (jid) => global.conn?.chats?.[jid] ?? {},
-version: version,
+version: [2, 3000, 1027934701],
 keepAliveIntervalMs: 55000,
 maxIdleTimeMs: 60000
 }
@@ -758,7 +758,7 @@ console.log(chalk.bold.red(lenguajeGB.smspurgeSessionSB3() + err))
 }
 
 async function purgeOldFiles() {
-const directories = ['./MichiBot/', './GataJadiBot/']
+const directories = ['./GataBotSession/', './GataJadiBot/']
 for (const dir of directories) {
 try {
 if (!fs.existsSync(dir)) {
